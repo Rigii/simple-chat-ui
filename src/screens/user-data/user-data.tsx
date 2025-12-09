@@ -1,4 +1,4 @@
-import { useEffect, type JSX } from "react";
+import { type JSX } from "react";
 import {
   Formik,
   Field,
@@ -48,14 +48,9 @@ export default function SignUp({ initialValues }: IProps): JSX.Element {
       console.error(strings.errorSubmittingUserData, error);
     } finally {
       setSubmitting(false);
-    }
-  };
-
-  useEffect(() => {
-    if (user?.email && user?.nickname) {
       navigate(SCREEN_ROUTES.CHAT_LIST);
     }
-  }, [user, navigate]);
+  };
 
   return (
     <div className="mx-auto p-6 bg-white/80 dark:bg-gray-800 rounded-lg shadow">
