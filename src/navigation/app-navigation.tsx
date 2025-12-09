@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { ChatList } from "../screens/chat-list/chat-list";
 import { SCREEN_ROUTES } from "../constants-global/screen-routes";
 import { useUserContext } from "../context/user-context/use-user-context";
-import { SafeRoute } from "./safe-route";
+import { SecurityRoute } from "./security-route";
 import SignUp from "../screens/user-data/user-data";
 
 export const AppNavigation = () => {
@@ -17,7 +17,7 @@ export const AppNavigation = () => {
         <Route
           path={SCREEN_ROUTES.CHAT_LIST}
           element={
-            <SafeRoute
+            <SecurityRoute
               userData={user}
               component={<ChatList />}
               redirectRoute={SCREEN_ROUTES.USER_AUTH}

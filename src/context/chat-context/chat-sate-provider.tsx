@@ -31,7 +31,7 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
         return [room];
       }
 
-      const existingIndex = prevRooms.findIndex((r) => r.id === room.id);
+      const existingIndex = prevRooms.findIndex((r) => r._id === room._id);
 
       if (existingIndex >= 0) {
         const updatedRooms = [...prevRooms];
@@ -76,9 +76,9 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
       if (!prevRooms) return null;
 
       return prevRooms.map((room) => {
-        if (room.id === roomId) {
+        if (room._id === roomId) {
           const participantExists = room.participants.some(
-            (p) => p.id === participant.id
+            (p) => p._id === participant._id
           );
 
           if (!participantExists) {
@@ -99,10 +99,10 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
       if (!prevRooms) return null;
 
       return prevRooms.map((room) => {
-        if (room.id === roomId) {
+        if (room._id === roomId) {
           return {
             ...room,
-            participants: room.participants.filter((p) => p.id !== userId),
+            participants: room.participants.filter((p) => p._id !== userId),
             updated: new Date(),
           };
         }
@@ -117,7 +117,7 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getRoomById = (roomId: string): IChatRoom | undefined => {
-    return rooms?.find((room) => room.id === roomId);
+    return rooms?.find((room) => room._id === roomId);
   };
 
   return (

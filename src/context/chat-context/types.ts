@@ -12,13 +12,13 @@ export interface IGetRoomMessagesDto {
 }
 
 export interface IChatUser {
-  id: string;
+  _id: string;
   nickname: string;
   role: string;
 }
 
 export interface IRoomMessage {
-  id: string;
+  _id: string;
   chatRoomId: string;
   senderId: string;
   senderName: string;
@@ -27,9 +27,8 @@ export interface IRoomMessage {
 }
 
 export interface IChatRoom {
-  id: string;
-  name: string;
-  updatedAt: string | Date;
+  _id: string;
+  chat_name: string;
   participants: IChatUser[];
   created: Date;
   updated: Date;

@@ -1,6 +1,6 @@
 import React from "react";
-import type { IChatRoom } from "../types";
 import { formatDate, getInitials } from "../../../services/common.service";
+import type { IChatRoom } from "../../../context/chat-context/types";
 
 export const ChatItem: React.FC<{
   chat: IChatRoom;
@@ -23,17 +23,17 @@ export const ChatItem: React.FC<{
     >
       <div className="flex items-center gap-3">
         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-500 text-white font-medium">
-          {getInitials(chat.name)}
+          {getInitials(chat.chat_name)}
         </div>
         <div className="min-w-0">
           <div className="text-sm font-medium text-gray-900 truncate">
-            {chat.name}
+            {chat.chat_name}
           </div>
         </div>
       </div>
 
       <div className="text-xs text-gray-500 whitespace-nowrap">
-        {formatDate(chat.updatedAt)}
+        {formatDate(chat.updated)}
       </div>
     </div>
   );
