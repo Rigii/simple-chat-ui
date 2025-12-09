@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Navbar } from "flowbite-react";
-import ChatList from "../screens/chat-list/chat-list";
+// import { Navbar } from "flowbite-react";
+import { ChatList } from "../screens/chat-list/chat-list";
 import { SCREEN_ROUTES } from "../constants-global/screen-routes";
 import { useUserContext } from "../context/user-context/use-user-context";
 import { SafeRoute } from "./safe-route";
@@ -11,7 +11,7 @@ export const AppNavigation = () => {
 
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <Routes>
         <Route path={SCREEN_ROUTES.USER_AUTH} element={<SignUp />} />
         <Route

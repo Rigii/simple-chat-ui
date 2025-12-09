@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import type { IChatRoom } from "./types";
 import { ChatItem } from "./components/chat-item";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/user-context/use-user-context";
 import { SCREEN_ROUTES } from "../../constants-global/screen-routes";
+import { Card, ListGroup, Badge } from "flowbite-react";
+import type { IChatRoom } from "../../context/chat-context/types";
 
-const ChatList: React.FC = () => {
+export const ChatList: React.FC = () => {
   const { user } = useUserContext();
   const navigate = useNavigate();
 
@@ -23,18 +24,24 @@ const ChatList: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto p-4">
-      <h2 className="text-lg font-semibold mb-2">Chat List</h2>
-      <div className="divide-y divide-gray-200 rounded-md border border-gray-100 overflow-hidden">
+      <Card>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-gray-900">Chats</h2>
+          <Badge size="sm">{items.length} total</Badge>
+        </div>
+
         {items.length === 0 ? (
-          <div className="p-4 text-sm text-gray-500">No chats yet.</div>
+          <div className="text-center py-10">
+            <p className="text-gray-500 mb-4">No chats yet</p>
+          </div>
         ) : (
-          items.map((chat) => (
-            <ChatItem key={chat.id} chat={chat} onClick={onItemClick} />
-          ))
+          <ListGroup className="border-none">
+            {items.map((chat) => (
+              <ChatItem key={chat.id} chat={chat} onClick={onItemClick} />
+            ))}
+          </ListGroup>
         )}
-      </div>
+      </Card>
     </div>
   );
 };
-
-export default ChatList;

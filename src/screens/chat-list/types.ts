@@ -1,15 +1,4 @@
-export interface IChatUser {
-  id: string;
-  nickname: string;
-  role: string;
-}
-
-export interface IChatRoom {
-  id: string;
-  name: string;
-  updatedAt: string | Date;
-  participants: IChatUser[];
-}
+import type { IChatRoom } from "../../context/chat-context/types";
 
 export interface IChatListProps {
   items: IChatRoom[];
