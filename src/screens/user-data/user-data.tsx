@@ -1,4 +1,4 @@
-import { type JSX } from "react";
+import { useEffect, type JSX } from "react";
 import {
   Formik,
   Field,
@@ -13,6 +13,8 @@ import { strings } from "./user-data.strings";
 import type { IProps, IUserDataValues } from "./user-data.types";
 import { postUserData } from "./user-data.api";
 import { useUserContext } from "../../context/user-context/use-user-context";
+import { useNavigate } from "react-router-dom";
+import { SCREEN_ROUTES } from "../../constants-global/screen-routes";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -25,12 +27,13 @@ const validationSchema = Yup.object({
 });
 
 export default function UserData({ initialValues }: IProps): JSX.Element {
-  const { setUser } = useUserContext();
+  const { user, setUser } = useUserContext();
+  const navigate = useNavigate();
 
   const baseValues: IUserDataValues = {
-    email: "",
-    nickname: "",
-    password: "",
+    email: user?.email ?? "",
+    nickname: user?.nickname ?? "",
+    password: user?.password ?? "",
     ...initialValues,
   };
 
@@ -47,6 +50,12 @@ export default function UserData({ initialValues }: IProps): JSX.Element {
       setSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (user?.email && user?.nickname) {
+      navigate(SCREEN_ROUTES.CHAT_LIST);
+    }
+  }, [user, navigate]);
 
   return (
     <div className="mx-auto p-6 bg-white/80 dark:bg-gray-800 rounded-lg shadow">
