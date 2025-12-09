@@ -1,12 +1,11 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import "./App.css";
-import UserData from "./screens/user-data/user-data";
+import UserData from "../screens/user-data/user-data";
 import { Navbar } from "flowbite-react";
-import ChatList from "./screens/chat-list/chat-list";
-import { SCREEN_ROUTES } from "./constants-global/screen-routes";
-import { useUserContext } from "./context/user-context/use-user-context";
+import ChatList from "../screens/chat-list/chat-list";
+import { SCREEN_ROUTES } from "../constants-global/screen-routes";
+import { useUserContext } from "../context/user-context/use-user-context";
 
-function App() {
+export const AppNavigation = () => {
   const { user } = useUserContext();
   const location = useLocation();
 
@@ -17,7 +16,7 @@ function App() {
         <Route
           path={SCREEN_ROUTES.USER_AUTH}
           element={
-            user?.email && user?.nickname ? (
+            user?.nickname ? (
               <Navigate
                 to={SCREEN_ROUTES.CHAT_LIST}
                 replace
@@ -28,11 +27,10 @@ function App() {
             )
           }
         />
-
         <Route
           path={SCREEN_ROUTES.CHAT_LIST}
           element={
-            user?.email && user?.nickname ? (
+            user?.nickname ? (
               <ChatList />
             ) : (
               <Navigate
@@ -43,13 +41,12 @@ function App() {
             )
           }
         />
-
         <Route
           path="*"
           element={
             <Navigate
               to={
-                user?.email && user?.nickname
+                user?.nickname
                   ? SCREEN_ROUTES.CHAT_LIST
                   : SCREEN_ROUTES.USER_AUTH
               }
@@ -60,6 +57,4 @@ function App() {
       </Routes>
     </div>
   );
-}
-
-export default App;
+};
