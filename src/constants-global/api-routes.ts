@@ -1,4 +1,4 @@
 export const API_ROUTES = {
   BASE_URL: "http://localhost:5001",
-  USER_PROFILE: "/user/profile",
+  USER_PROFILE: "/user/create-user",
 };
