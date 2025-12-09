@@ -26,7 +26,7 @@ const validationSchema = Yup.object({
     .required("Password is required"),
 });
 
-export default function UserData({ initialValues }: IProps): JSX.Element {
+export default function SignUp({ initialValues }: IProps): JSX.Element {
   const { user, setUser } = useUserContext();
   const navigate = useNavigate();
 
