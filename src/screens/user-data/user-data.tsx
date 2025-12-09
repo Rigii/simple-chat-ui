@@ -5,20 +5,13 @@ import {
   Form as FormikForm,
   ErrorMessage,
   type FieldProps,
+  type FormikHelpers,
 } from "formik";
 import * as Yup from "yup";
 import { Label, TextInput, Button } from "flowbite-react";
-
-type UserDataValues = {
-  email: string;
-  nickname: string;
-  password: string;
-};
-
-type Props = {
-  initialValues?: Partial<UserDataValues>;
-  onSubmit?: (values: UserDataValues) => void | Promise<void>;
-};
+import { strings } from "./user-data.strings";
+import type { IProps, IUserDataValues } from "./user-data.types";
+import { postUserData } from "./user-data.api";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -30,39 +23,40 @@ const validationSchema = Yup.object({
     .required("Password is required"),
 });
 
-export default function UserData({
-  initialValues,
-  onSubmit,
-}: Props): JSX.Element {
-  const baseValues: UserDataValues = {
+export default function UserData({ initialValues }: IProps): JSX.Element {
+  const baseValues: IUserDataValues = {
     email: "",
     nickname: "",
     password: "",
     ...initialValues,
   };
 
+  const onSubmit = async (
+    values: IUserDataValues,
+    { setSubmitting }: FormikHelpers<IUserDataValues>
+  ) => {
+    try {
+      // simulate network delay for UX locally
+      await postUserData(values);
+      await new Promise((r) => setTimeout(r, 500));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+  // postUserData
   return (
-    <div className="max-w-md mx-auto p-6 bg-white/80 dark:bg-gray-800 rounded-lg shadow">
-      <h2 className="text-2xl font-semibold mb-4">Get started</h2>
+    <div className="mx-auto p-6 bg-white/80 dark:bg-gray-800 rounded-lg shadow">
+      <h2 className="text-2xl font-semibold mb-4">{strings.getStartedTitle}</h2>
 
       <Formik
         initialValues={baseValues}
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting }) => {
-          try {
-            // simulate network delay for UX locally
-            await new Promise((r) => setTimeout(r, 500));
-            if (onSubmit) await onSubmit(values);
-            else console.log("Submitted user data:", values);
-          } finally {
-            setSubmitting(false);
-          }
-        }}
+        onSubmit={onSubmit}
       >
         {({ isSubmitting, isValid }) => (
           <FormikForm className="space-y-4">
             <div>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{strings.emailLabel}</Label>
               <Field name="email">
                 {({ field }: FieldProps) => (
                   <TextInput
@@ -71,7 +65,7 @@ export default function UserData({
                     type="email"
                     placeholder="you@example.com"
                     required
-                    className="mt-1"
+                    className="mt-1 min-w-sm"
                   />
                 )}
               </Field>
@@ -83,7 +77,7 @@ export default function UserData({
             </div>
 
             <div>
-              <Label htmlFor="nickname">Nickname</Label>
+              <Label htmlFor="nickname">{strings.nicknameLabel}</Label>
               <Field name="nickname">
                 {({ field }: FieldProps) => (
                   <TextInput
@@ -104,7 +98,7 @@ export default function UserData({
             </div>
 
             <div>
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">{strings.passwordLabel}</Label>
               <Field name="password">
                 {({ field }: FieldProps) => (
                   <TextInput
