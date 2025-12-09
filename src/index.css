@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "flowbite-react/plugin/tailwindcss";
+@source "../.flowbite-react/class-list.json";
 
 /* Improve drag and drop cursor tracking */
 [data-rbd-drag-handle-context-id] {
