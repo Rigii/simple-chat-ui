@@ -12,6 +12,7 @@ import { Label, TextInput, Button } from "flowbite-react";
 import { strings } from "./user-data.strings";
 import type { IProps, IUserDataValues } from "./user-data.types";
 import { postUserData } from "./user-data.api";
+import { useUserContext } from "../../context/user-context/use-user-context";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -24,6 +25,8 @@ const validationSchema = Yup.object({
 });
 
 export default function UserData({ initialValues }: IProps): JSX.Element {
+  const { setUser } = useUserContext();
+
   const baseValues: IUserDataValues = {
     email: "",
     nickname: "",
@@ -36,14 +39,15 @@ export default function UserData({ initialValues }: IProps): JSX.Element {
     { setSubmitting }: FormikHelpers<IUserDataValues>
   ) => {
     try {
-      // simulate network delay for UX locally
       await postUserData(values);
-      await new Promise((r) => setTimeout(r, 500));
+      setUser(values);
+    } catch (error) {
+      console.error(strings.errorSubmittingUserData, error);
     } finally {
       setSubmitting(false);
     }
   };
-  // postUserData
+
   return (
     <div className="mx-auto p-6 bg-white/80 dark:bg-gray-800 rounded-lg shadow">
       <h2 className="text-2xl font-semibold mb-4">{strings.getStartedTitle}</h2>

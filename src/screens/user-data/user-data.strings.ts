@@ -4,4 +4,5 @@ export const strings = {
   nicknameLabel: "Nickname",
   passwordLabel: "Password",
   emailPlaceholder: "you@example.com",
+  errorSubmittingUserData: "Error submitting user data:",
 };
