@@ -13,6 +13,8 @@ import { strings } from "./user-data.strings";
 import type { IProps, IUserDataValues } from "./user-data.types";
 import { postUserData } from "./user-data.api";
 import { useUserContext } from "../../context/user-context/use-user-context";
+import { useNavigate } from "react-router-dom";
+import { SCREEN_ROUTES } from "../../constants-global/screen-routes";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -24,13 +26,14 @@ const validationSchema = Yup.object({
     .required("Password is required"),
 });
 
-export default function UserData({ initialValues }: IProps): JSX.Element {
-  const { setUser } = useUserContext();
+export default function SignUp({ initialValues }: IProps): JSX.Element {
+  const { user, setUser } = useUserContext();
+  const navigate = useNavigate();
 
   const baseValues: IUserDataValues = {
-    email: "",
-    nickname: "",
-    password: "",
+    email: user?.email ?? "",
+    nickname: user?.nickname ?? "",
+    password: user?.password ?? "",
     ...initialValues,
   };
 
@@ -45,6 +48,7 @@ export default function UserData({ initialValues }: IProps): JSX.Element {
       console.error(strings.errorSubmittingUserData, error);
     } finally {
       setSubmitting(false);
+      navigate(SCREEN_ROUTES.CHAT_LIST);
     }
   };
 

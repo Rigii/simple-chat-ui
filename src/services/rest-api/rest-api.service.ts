@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_ROUTES } from "../constants-global/api-routes";
+import { API_ROUTES } from "../../constants-global/api-routes";
 
 export const getInstance = () => {
   return axios.create({

@@ -1,13 +1,16 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App.tsx";
+import { AppNavigation } from "./navigation/app-navigation.tsx";
 import { AppProviders } from "./context/app-state-provider.tsx";
+import { BrowserRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AppProviders>
-      <App />
+      <BrowserRouter>
+        <AppNavigation />
+      </BrowserRouter>
     </AppProviders>
   </StrictMode>
 );
