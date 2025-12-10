@@ -54,6 +54,10 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
     setRooms(newRooms);
   };
 
+  const getActiveRoom = (roomId: string): IChatRoom | undefined => {
+    return rooms?.find((room) => room._id === roomId);
+  };
+
   // const updateRoomLastActivity = (roomId: string) => {
   //   setRooms((prevRooms) => {
   //     if (!prevRooms) return null;
@@ -126,6 +130,7 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
         rooms,
         activeRoomId,
         setActiveRoomId,
+        getActiveRoom,
         setRoom,
         setAllRooms,
         addParticipantToRoom,

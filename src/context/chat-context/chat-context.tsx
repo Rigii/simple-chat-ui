@@ -11,6 +11,7 @@ const defaultChatContext: IChatContext = {
   removeParticipantFromRoom: () => {},
   getRoomById: () => undefined,
   clearAllRooms: () => {},
+  getActiveRoom: () => undefined,
 };
 
 export const ChatContext = createContext<IChatContext>(defaultChatContext);

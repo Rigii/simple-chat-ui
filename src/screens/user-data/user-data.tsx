@@ -10,7 +10,7 @@ import {
 import * as Yup from "yup";
 import { Label, TextInput, Button } from "flowbite-react";
 import { strings } from "./user-data.strings";
-import type { IProps, IUserDataValues } from "./user-data.types";
+import type { IUserDataValues } from "./user-data.types";
 import { postUserData } from "./user-data.api";
 import { useUserContext } from "../../context/user-context/use-user-context";
 import { useNavigate } from "react-router-dom";
@@ -26,15 +26,15 @@ const validationSchema = Yup.object({
     .required("Password is required"),
 });
 
-export default function SignUp({ initialValues }: IProps): JSX.Element {
+export default function SignUp(): JSX.Element {
   const { user, setUser } = useUserContext();
   const navigate = useNavigate();
 
   const baseValues: IUserDataValues = {
+    _id: user?._id ?? "",
     email: user?.email ?? "",
     nickname: user?.nickname ?? "",
     password: user?.password ?? "",
-    ...initialValues,
   };
 
   const onSubmit = async (
