@@ -24,7 +24,7 @@ export const InputChatRoom: React.FC<{
       message: inputValue,
       nickname: user.nickname,
       chatRoomId: currentRoom._id,
-      senderId: user._id,
+      participantId: user._id,
     };
 
     sendMessage(currentRoom._id, inputValue, newMessage);

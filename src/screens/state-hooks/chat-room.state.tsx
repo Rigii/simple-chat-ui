@@ -26,7 +26,7 @@ export const useChatRoomState = () => {
       const roomMessages = await getRoomMessages({
         chatRoomId: currentRoom._id,
         userId: user._id,
-        chunkLimit: 40,
+        chunkLimit: 200,
       });
 
       setMessages(roomMessages);

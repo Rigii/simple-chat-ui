@@ -1,7 +1,7 @@
 export interface IPostRoomMessageDto {
   chatRoomId: string;
   message: string;
-  senderId: string;
+  participantId: string;
   nickname: string;
 }
 
@@ -20,7 +20,8 @@ export interface IChatUser {
 export interface IRoomMessage {
   _id: string;
   chatRoomId: string;
-  senderId: string;
+  participantId: string;
+
   nickname: string;
   message: string;
   created?: string;

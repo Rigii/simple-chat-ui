@@ -79,7 +79,7 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
       if (socketRef.current && isConnected) {
         socketRef.current.emit(SOCKET_EVENTS.CHAT_ROOM_MESSAGE, {
           chatRoomId: roomId,
-          senderId: user?._id,
+          participantId: user?._id,
           nickname: user?.nickname,
           message,
         });
