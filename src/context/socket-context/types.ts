@@ -1,3 +1,5 @@
+import type { IRoomMessage } from "../chat-context/types";
+
 export interface ISocketContextType {
   isConnected: boolean;
   joinRoom: (roomId: string) => void;
@@ -7,10 +9,13 @@ export interface ISocketContextType {
     message: string,
     additionalData?: object | undefined
   ) => void;
-  addMessageListener: (event: string, handler: (data: unknown) => void) => void;
+  addMessageListener: (
+    event: string,
+    handler: (data: IRoomMessage) => void
+  ) => void;
   removeMessageListener: (
     event: string,
-    handler: (data: unknown) => void
+    handler: (data: IRoomMessage) => void
   ) => void;
   disconnect: () => void;
 }

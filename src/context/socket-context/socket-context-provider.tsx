@@ -8,6 +8,7 @@ import {
 } from "../../constants-global/socket-routes";
 import type { ISocketProviderProps } from "./types";
 import { SocketContext } from "./socket-context";
+import type { IRoomMessage } from "../chat-context/types";
 
 export const SocketProvider = ({ children }: ISocketProviderProps) => {
   const [isConnected, setIsConnected] = useState(false);
@@ -88,16 +89,17 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
   );
 
   const addMessageListener = useCallback(
-    (event: string, handler: (data: unknown) => void) => {
-      if (socketRef.current) {
-        socketRef.current.on(event, handler);
+    (event: string, handler: (data: IRoomMessage) => void) => {
+      if (!isConnected || !socketRef.current) {
+        return;
       }
+      socketRef.current.on(event, handler);
     },
-    []
+    [isConnected]
   );
 
   const removeMessageListener = useCallback(
-    (event: string, handler: (data: unknown) => void) => {
+    (event: string, handler: (data: IRoomMessage) => void) => {
       if (socketRef.current) {
         socketRef.current.off(event, handler);
       }
