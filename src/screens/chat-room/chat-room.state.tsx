@@ -5,6 +5,7 @@ import { useChatContext } from "../../context/chat-context/use-chat-context";
 import { getRoomMessages } from "./api/chat-room.api";
 import { useNavigate, useParams } from "react-router-dom";
 import { SCREEN_ROUTES } from "../../constants-global/screen-routes";
+import { useSocketContext } from "../../context/socket-context/use-socket-context";
 
 export const useChatRoomState = () => {
   const navigate = useNavigate();
@@ -12,11 +13,12 @@ export const useChatRoomState = () => {
   const { chatId } = useParams<{ chatId: string }>();
 
   const { user } = useUserContext();
+  const { isConnected } = useSocketContext();
   const { getActiveRoom } = useChatContext();
   const [messages, setMessages] = useState<IRoomMessage[]>([]);
 
   const currentRoom = getActiveRoom(chatId || "");
-
+  console.log(7777777, isConnected);
   useEffect(() => {
     if (!user?._id || !currentRoom?._id) {
       return;

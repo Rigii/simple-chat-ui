@@ -15,6 +15,7 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
   const { user } = useUserContext();
 
   useEffect(() => {
+    console.log(111111, user);
     if (!user?._id) {
       if (socketRef.current) {
         socketRef.current.disconnect();
@@ -35,6 +36,8 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
     });
 
     socketRef.current = socket;
+
+    console.log(2222, socket);
 
     // Connection events
     socket.on("connect", () => {
