@@ -1,6 +1,6 @@
-import { API_ROUTES } from "../../constants-global/api-routes";
-import type { IRoomMessage } from "../../context/chat-context/types";
-import { postData } from "../../services/rest-api/rest-api.service";
+import { API_ROUTES } from "../../../constants-global/api-routes";
+import type { IRoomMessage } from "../../../context/chat-context/types";
+import { postData } from "../../../services/rest-api/rest-api.service";
 
 export const getRoomMessages = async ({
   chatRoomId,

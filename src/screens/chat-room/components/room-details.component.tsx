@@ -1,10 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useChatContext } from "../../context/chat-context/use-chat-context";
-import { SCREEN_ROUTES } from "../../constants-global/screen-routes";
+import { useChatContext } from "../../../context/chat-context/use-chat-context";
+import { SCREEN_ROUTES } from "../../../constants-global/screen-routes";
 import { HiBackspace } from "react-icons/hi";
 import { Button } from "flowbite-react";
 
-import { strings } from "./strings";
+import { strings } from "../strings";
 
 export const ChatRoomDetail: React.FC = () => {
   const { chatId } = useParams<{ chatId: string }>();
