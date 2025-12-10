@@ -46,7 +46,11 @@ export const ChatRoomDetail: React.FC<ChatRoomDetailProps> = ({ messages }) => {
             {`${strings.participiants} ${chatRoom.participants.length}/${chatRoom.participants.length}`}
           </span>
           <span className="text-sm text-gray-500">
-            {strings.created}: {new Date(chatRoom.created).toLocaleDateString()}
+            {strings.created}:{" "}
+            {new Date(chatRoom.created).toLocaleTimeString([], {
+              year: "2-digit",
+              month: "2-digit",
+            })}
           </span>
           <Button
             onClick={() => navigate(SCREEN_ROUTES.CHAT_LIST)}
