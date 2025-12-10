@@ -11,6 +11,7 @@ export const RoomMessagesBlock: React.FC<{
   currentRoom: IChatRoom | undefined;
 }> = ({ messages, currentRoom }) => {
   const { user } = useUserContext();
+  console.log(888888, messages);
 
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -23,16 +24,22 @@ export const RoomMessagesBlock: React.FC<{
           <div
             key={msg._id}
             className={`flex ${
-              msg.senderName === "user" ? "justify-end" : "justify-start"
+              msg.nickname === user.nickname ? "justify-end" : "justify-start"
             }`}
           >
             <div
               className={`max-w-xs px-4 py-2 rounded-lg ${
-                msg.senderName === user.nickname
+                msg.nickname === user.nickname
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 text-gray-900"
               }`}
             >
+              <div className="flex flex-row gap-3">
+                <p className="text-xs">{msg.nickname}</p>
+                <p className="text-xs">
+                  {new Date(msg?.created || "").toLocaleDateString()}
+                </p>
+              </div>
               <p className="text-sm">{msg.message}</p>
             </div>
           </div>

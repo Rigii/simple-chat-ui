@@ -4,7 +4,7 @@ import { useUserContext } from "../user-context/use-user-context";
 import { API_ROUTES } from "../../constants-global/api-routes";
 import {
   CHAT_NAMESPACES,
-  CHAT_ROOM_EMIT_EVENTS,
+  SOCKET_EVENTS,
 } from "../../constants-global/socket-routes";
 import type { ISocketProviderProps } from "./types";
 import { SocketContext } from "./socket-context";
@@ -15,7 +15,6 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
   const { user } = useUserContext();
 
   useEffect(() => {
-    console.log(111111, user);
     if (!user?._id) {
       if (socketRef.current) {
         socketRef.current.disconnect();
@@ -36,8 +35,6 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
     });
 
     socketRef.current = socket;
-
-    console.log(2222, socket);
 
     // Connection events
     socket.on("connect", () => {
@@ -64,7 +61,7 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
 
   const joinRoom = useCallback((roomId: string) => {
     if (socketRef.current) {
-      socketRef.current.emit("join-room", roomId);
+      socketRef.current.emit(SOCKET_EVENTS.JOIN_CHAT, roomId);
       console.log(`Joined room: ${roomId}`);
     }
   }, []);
@@ -77,16 +74,17 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
   }, []);
 
   const sendMessage = useCallback(
-    (roomId: string, message: string, additionalData?: object) => {
+    (roomId: string, message: string) => {
       if (socketRef.current && isConnected) {
-        socketRef.current.emit(CHAT_ROOM_EMIT_EVENTS.CHAT_ROOM_MESSAGE, {
-          roomId,
+        socketRef.current.emit(SOCKET_EVENTS.CHAT_ROOM_MESSAGE, {
+          chatRoomId: roomId,
+          senderId: user?._id,
+          nickname: user?.nickname,
           message,
-          ...additionalData,
         });
       }
     },
-    [isConnected]
+    [isConnected, user]
   );
 
   const addMessageListener = useCallback(

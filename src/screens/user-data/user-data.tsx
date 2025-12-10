@@ -21,9 +21,6 @@ const validationSchema = Yup.object({
   nickname: Yup.string()
     .min(3, "Nickname must be at least 3 characters")
     .required("Nickname is required"),
-  password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
-    .required("Password is required"),
 });
 
 export default function SignUp(): JSX.Element {
@@ -33,7 +30,6 @@ export default function SignUp(): JSX.Element {
   const baseValues: IPostUserData = {
     email: user?.email ?? "",
     nickname: user?.nickname ?? "",
-    password: user?.password ?? "",
   };
 
   const onSubmit = async (
@@ -102,27 +98,6 @@ export default function SignUp(): JSX.Element {
               </Field>
               <ErrorMessage
                 name="nickname"
-                component="div"
-                className="text-sm text-red-500 mt-1"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="password">{strings.passwordLabel}</Label>
-              <Field name="password">
-                {({ field }: FieldProps) => (
-                  <TextInput
-                    {...field}
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    required
-                    className="mt-1"
-                  />
-                )}
-              </Field>
-              <ErrorMessage
-                name="password"
                 component="div"
                 className="text-sm text-red-500 mt-1"
               />

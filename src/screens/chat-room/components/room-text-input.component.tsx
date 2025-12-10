@@ -6,12 +6,14 @@ import type {
   IRoomMessage,
 } from "../../../context/chat-context/types";
 import { useUserContext } from "../../../context/user-context/use-user-context";
+import { useSocketContext } from "../../../context/socket-context/use-socket-context";
 
 export const InputChatRoom: React.FC<{
   currentRoom?: IChatRoom;
   setMessages: React.Dispatch<React.SetStateAction<IRoomMessage[]>>;
 }> = ({ currentRoom, setMessages }) => {
   const { user } = useUserContext();
+  const { sendMessage } = useSocketContext();
   const [inputValue, setInputValue] = useState("");
 
   const handleSendMessage = () => {
@@ -20,11 +22,12 @@ export const InputChatRoom: React.FC<{
     const newMessage: IRoomMessage = {
       _id: Date.now().toString(),
       message: inputValue,
-      senderName: user.nickname,
-      timestamp: new Date(),
+      nickname: user.nickname,
       chatRoomId: currentRoom._id,
       senderId: user._id,
     };
+
+    sendMessage(currentRoom._id, inputValue, newMessage);
     setMessages((messages) => [...messages, newMessage]);
     setInputValue("");
   };

@@ -2,7 +2,7 @@ export interface IPostRoomMessageDto {
   chatRoomId: string;
   message: string;
   senderId: string;
-  senderName: string;
+  nickname: string;
 }
 
 export interface IGetRoomMessagesDto {
@@ -21,9 +21,10 @@ export interface IRoomMessage {
   _id: string;
   chatRoomId: string;
   senderId: string;
-  senderName: string;
+  nickname: string;
   message: string;
-  timestamp: Date;
+  created?: string;
+  updated?: string;
 }
 
 export interface IChatRoom {

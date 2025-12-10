@@ -19,6 +19,7 @@ export const useChatRoomState = () => {
 
   const currentRoom = getActiveRoom(chatId || "");
   console.log(7777777, isConnected);
+  console.log(888888, messages);
   useEffect(() => {
     if (!user?._id || !currentRoom?._id) {
       return;
