@@ -19,7 +19,7 @@ export const ChatList: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!user?.nickname) {
+    if (!user?._id) {
       navigate(SCREEN_ROUTES.USER_AUTH);
     }
   }, [user, navigate]);

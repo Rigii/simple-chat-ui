@@ -10,7 +10,7 @@ import {
 import * as Yup from "yup";
 import { Label, TextInput, Button } from "flowbite-react";
 import { strings } from "./user-data.strings";
-import type { IUserDataValues } from "./user-data.types";
+import type { IPostUserData } from "./user-data.types";
 import { postUserData } from "./user-data.api";
 import { useUserContext } from "../../context/user-context/use-user-context";
 import { useNavigate } from "react-router-dom";
@@ -30,20 +30,22 @@ export default function SignUp(): JSX.Element {
   const { user, setUser } = useUserContext();
   const navigate = useNavigate();
 
-  const baseValues: IUserDataValues = {
-    _id: user?._id ?? "",
+  const baseValues: IPostUserData = {
     email: user?.email ?? "",
     nickname: user?.nickname ?? "",
     password: user?.password ?? "",
   };
 
   const onSubmit = async (
-    values: IUserDataValues,
-    { setSubmitting }: FormikHelpers<IUserDataValues>
+    values: IPostUserData,
+    { setSubmitting }: FormikHelpers<IPostUserData>
   ) => {
     try {
-      await postUserData(values);
-      setUser(values);
+      const responce = await postUserData(values);
+      if (!responce._id) {
+        return;
+      }
+      setUser({ ...values, _id: responce._id });
     } catch (error) {
       console.error(strings.errorSubmittingUserData, error);
     } finally {
