@@ -11,7 +11,6 @@ export const RoomMessagesBlock: React.FC<{
   currentRoom: IChatRoom | undefined;
 }> = ({ messages, currentRoom }) => {
   const { user } = useUserContext();
-  console.log(888888, messages);
 
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-4">
