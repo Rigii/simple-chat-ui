@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, TextInput } from "flowbite-react";
 import { HiPaperAirplane } from "react-icons/hi";
-import { strings } from "../strings";
 import type {
   IChatRoom,
   IRoomMessage,
@@ -9,18 +8,14 @@ import type {
 import { useUserContext } from "../../../context/user-context/use-user-context";
 
 export const InputChatRoom: React.FC<{
-  currentRoom: IChatRoom;
+  currentRoom?: IChatRoom;
   setMessages: React.Dispatch<React.SetStateAction<IRoomMessage[]>>;
 }> = ({ currentRoom, setMessages }) => {
   const { user } = useUserContext();
   const [inputValue, setInputValue] = useState("");
 
-  if (!currentRoom || !user) {
-    return <div>{strings.failToLoadRoomDetails}</div>;
-  }
-
   const handleSendMessage = () => {
-    if (!inputValue.trim() || !user) return;
+    if (!inputValue.trim() || !user || !currentRoom) return;
 
     const newMessage: IRoomMessage = {
       _id: Date.now().toString(),
@@ -51,7 +46,12 @@ export const InputChatRoom: React.FC<{
           placeholder="Type a message..."
           className="flex-1"
         />
-        <Button onClick={handleSendMessage} color="blue" className="px-4">
+        <Button
+          disabled={!inputValue.trim() || !user || !currentRoom}
+          onClick={handleSendMessage}
+          color="blue"
+          className="px-4"
+        >
           <HiPaperAirplane className="h-5 w-5" />
         </Button>
       </div>
