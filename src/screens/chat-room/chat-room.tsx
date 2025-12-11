@@ -5,8 +5,9 @@ import { RoomMessagesBlock } from "./components/room-messages.component";
 import { useChatRoomSocketListener } from "../state-hooks/room-socket.state";
 
 export const ChatRoom: React.FC = () => {
-  const { messages, currentRoom, setMessages } = useChatRoomState();
-  useChatRoomSocketListener({ setMessages });
+  const { messages, currentRoom, setMessages, setOnlineParticipants } =
+    useChatRoomState();
+  useChatRoomSocketListener({ setMessages, setOnlineParticipants });
 
   return (
     <div className="flex flex-col h-screen">

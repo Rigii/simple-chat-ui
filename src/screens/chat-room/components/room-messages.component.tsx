@@ -15,12 +15,10 @@ export const RoomMessagesBlock: React.FC<{
   const { user } = useUserContext();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
   }, [messages]);
 
-  // If no messages or no user/room
   if (!currentRoom || !user || messages.length === 0) {
     return (
       <Card className="h-full flex items-center justify-center">
@@ -34,10 +32,8 @@ export const RoomMessagesBlock: React.FC<{
 
   return (
     <div className="h-full flex flex-col">
-      {/* Room header */}
       <ChatRoomDetail messages={messages} />
 
-      {/* Messages container with scroll */}
       <Card className="flex-1 p-0 overflow-hidden">
         <div className="h-full overflow-y-auto p-4">
           <List className="border-0 space-y-3">
@@ -58,7 +54,6 @@ export const RoomMessagesBlock: React.FC<{
                   `}
                 >
                   <div className="flex flex-col gap-1">
-                    {/* Message header */}
                     <div className="flex justify-between items-center">
                       <span
                         className={`
@@ -83,7 +78,6 @@ export const RoomMessagesBlock: React.FC<{
                       </span>
                     </div>
 
-                    {/* Message content */}
                     <p
                       className={`
                       text-sm mt-1 break-words
@@ -97,7 +91,6 @@ export const RoomMessagesBlock: React.FC<{
                       {msg.message}
                     </p>
 
-                    {/* Date (below message) */}
                     <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                       {msg.created
                         ? new Date(msg.created).toLocaleDateString()
@@ -108,7 +101,6 @@ export const RoomMessagesBlock: React.FC<{
               );
             })}
 
-            {/* Invisible element for auto-scroll */}
             <div ref={messagesEndRef} />
           </List>
         </div>

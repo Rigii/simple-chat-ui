@@ -14,10 +14,10 @@ export const useChatRoomState = () => {
   const { user } = useUserContext();
   const { getActiveRoom } = useChatContext();
   const [messages, setMessages] = useState<IRoomMessage[]>([]);
+  const [onlineParticipants, setOnlineParticipants] = useState<string[]>([]);
 
   const currentRoom = getActiveRoom(chatId || "");
 
-  console.log(888888, messages);
   useEffect(() => {
     if (!user?._id || !currentRoom?._id) {
       return;
@@ -46,5 +46,6 @@ export const useChatRoomState = () => {
     messages,
     currentRoom,
     setMessages,
+    setOnlineParticipants,
   };
 };

@@ -10,32 +10,42 @@ export const useChatRoomSocketListener = ({
   setMessages,
 }: {
   setMessages: React.Dispatch<React.SetStateAction<IRoomMessage[]>>;
+  setOnlineUsers: React.Dispatch<React.SetStateAction<string[]>>;
 }) => {
   const { chatId } = useParams<{ chatId: string }>();
   const { user } = useUserContext();
 
-  const { addMessageListener, removeMessageListener } = useSocketContext();
+  const { addSocketEventListener, removeSocketEventListener } =
+    useSocketContext();
 
   useEffect(() => {
     const handleIncomingMessage = (data: IRoomMessage) => {
-      console.log(111122223333, data);
       if (data.chatRoomId !== chatId || data.participantId === user?._id) {
         return;
       }
       setMessages((prev) => [...prev, data]);
     };
 
-    addMessageListener(SOCKET_EVENTS.CHAT_ROOM_MESSAGE, handleIncomingMessage);
+    const handleRoomActiveInterlocutors = () => {};
+
+    addSocketEventListener<IRoomMessage>(
+      SOCKET_EVENTS.CHAT_ROOM_MESSAGE,
+      handleIncomingMessage
+    );
+    addSocketEventListener(
+      SOCKET_EVENTS.ACTIVE_USERS,
+      handleRoomActiveInterlocutors
+    );
 
     return () => {
-      removeMessageListener(
+      removeSocketEventListener(
         SOCKET_EVENTS.CHAT_ROOM_MESSAGE,
-        handleIncomingMessage
+        handleRoomActiveInterlocutors
       );
     };
   }, [
-    addMessageListener,
-    removeMessageListener,
+    addSocketEventListener,
+    removeSocketEventListener,
     setMessages,
     chatId,
     user?._id,

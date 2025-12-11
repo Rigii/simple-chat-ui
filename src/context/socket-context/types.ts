@@ -9,17 +9,23 @@ export interface ISocketContextType {
     message: string,
     additionalData?: object | undefined
   ) => void;
-  addMessageListener: (
+  addSocketEventListener: <T>(
     event: string,
-    handler: (data: IRoomMessage) => void
+    handler: (data: T) => void
   ) => void;
-  removeMessageListener: (
+  removeSocketEventListener: <T>(
     event: string,
-    handler: (data: IRoomMessage) => void
+    handler: (data: T) => void
   ) => void;
   disconnect: () => void;
 }
 
 export interface ISocketProviderProps {
   children: React.ReactNode;
+}
+
+export interface ISocketEvents {
+  "room:message": IRoomMessage;
+  "user:typing": { roomId: string; userId: string };
+  "server:ping": number;
 }
