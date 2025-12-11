@@ -90,21 +90,16 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
 
   const addSocketEventListener = useCallback(
     <T,>(event: string, handler: (data: T) => void) => {
-      if (!isConnected || !socketRef.current) {
-        return;
-      }
-      socketRef.current.on(event, handler);
+      socketRef?.current?.on(event, handler);
     },
-    [isConnected]
+    [socketRef]
   );
 
   const removeSocketEventListener = useCallback(
     <T,>(event: string, handler: (data: T) => void) => {
-      if (socketRef.current) {
-        socketRef.current.off(event, handler);
-      }
+      socketRef?.current?.off(event, handler);
     },
-    []
+    [socketRef]
   );
 
   const disconnect = useCallback(() => {

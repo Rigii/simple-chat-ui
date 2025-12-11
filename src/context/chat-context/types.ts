@@ -28,6 +28,11 @@ export interface IRoomMessage {
   updated?: string;
 }
 
+export interface IRoomDetails {
+  messages: IRoomMessage[];
+  activeParticipants: string[];
+}
+
 export interface IChatRoom {
   _id: string;
   chat_name: string;

@@ -1,5 +1,3 @@
-import type { IRoomMessage } from "../chat-context/types";
-
 export interface ISocketContextType {
   isConnected: boolean;
   joinRoom: (roomId: string) => void;
@@ -24,8 +22,15 @@ export interface ISocketProviderProps {
   children: React.ReactNode;
 }
 
-export interface ISocketEvents {
-  "room:message": IRoomMessage;
-  "user:typing": { roomId: string; userId: string };
-  "server:ping": number;
+export interface IParticipantJoinedLeftRoomEventData {
+  roomId: string;
+  roomName: string;
+  userId: string;
+  nickname: string;
+}
+
+export interface IChatRoomParticipantsEventData {
+  roomId: string;
+  roomName: string;
+  users: string[];
 }
