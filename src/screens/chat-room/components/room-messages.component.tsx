@@ -36,16 +36,17 @@ export const RoomMessagesBlock: React.FC<{
         <List className="border-0 space-y-3">
           {messages.map((msg) => {
             const isOwnMessage = msg.nickname === user.nickname;
-            const isActive = onlineParticipants?.find(
-              (id) => id === msg.participantId
-            );
-
+            const isActive = onlineParticipants?.includes(msg.participantId);
             return (
               <ListItem
                 key={msg._id}
                 className={`
                     p-3 border-0
-                    marker:${(!!isActive || isOwnMessage) && "text-green-500"}
+                    marker:${
+                      isActive || isOwnMessage
+                        ? "text-green-500"
+                        : "text-gray-500"
+                    }
                     ${
                       isOwnMessage
                         ? "bg-blue-50 dark:bg-blue-900/20 ml-auto"
