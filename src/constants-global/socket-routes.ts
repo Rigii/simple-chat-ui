@@ -8,5 +8,6 @@ export const SOCKET_EVENTS = {
   CHAT_ROOM_MESSAGE: "chat_room_message",
   ACTIVE_ROOM_PARTICIPANTS: "active_room_participants",
   PARTICIPANT_JOINED_ROOM: "user_joined_chat",
+  PARTICIPANT_LEFT_ROOM: "participant_disconnected",
   CLIENT_READY: "client_ready",
 };

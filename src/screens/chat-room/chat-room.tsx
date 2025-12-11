@@ -3,14 +3,30 @@ import { InputChatRoom } from "./components/room-text-input.component";
 import { useChatRoomState } from "../state-hooks/chat-room.state";
 import { RoomMessagesBlock } from "./components/room-messages.component";
 import { useChatRoomSocketListener } from "../state-hooks/room-socket.state";
+import { ChatRoomDetail } from "./components/room-details.component";
 
 export const ChatRoom: React.FC = () => {
-  const { messages, currentRoom, setMessages } = useChatRoomState();
-  useChatRoomSocketListener({ setMessages });
+  const {
+    messages,
+    currentRoom,
+    onlineParticipants,
+    setMessages,
+    setOnlineParticipants,
+  } = useChatRoomState();
+  useChatRoomSocketListener({ setMessages, setOnlineParticipants });
 
   return (
     <div className="flex flex-col h-screen">
-      <RoomMessagesBlock messages={messages} currentRoom={currentRoom} />
+      <ChatRoomDetail
+        messages={messages}
+        onlineParticipants={onlineParticipants}
+      />
+
+      <RoomMessagesBlock
+        messages={messages}
+        currentRoom={currentRoom}
+        onlineParticipants={onlineParticipants}
+      />
       <InputChatRoom currentRoom={currentRoom} setMessages={setMessages} />
     </div>
   );

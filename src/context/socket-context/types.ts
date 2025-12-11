@@ -22,11 +22,16 @@ export interface ISocketProviderProps {
   children: React.ReactNode;
 }
 
-export interface IParticipantJoinedLeftRoomEventData {
+export interface IParticipantJoinedLeftRoomEvent {
   roomId: string;
   roomName: string;
   userId: string;
   nickname: string;
+}
+
+export interface IParticipantJoinedLeftRoomEventData {
+  message: string;
+  data: IParticipantJoinedLeftRoomEvent;
 }
 
 export interface IChatRoomParticipantsEventData {

@@ -6,12 +6,12 @@ import type {
   IChatRoom,
   IRoomMessage,
 } from "../../../context/chat-context/types";
-import { ChatRoomDetail } from "./room-details.component";
 
 export const RoomMessagesBlock: React.FC<{
   messages: IRoomMessage[];
   currentRoom: IChatRoom | undefined;
-}> = ({ messages, currentRoom }) => {
+  onlineParticipants: string[] | undefined;
+}> = ({ messages, currentRoom, onlineParticipants }) => {
   const { user } = useUserContext();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -31,20 +31,21 @@ export const RoomMessagesBlock: React.FC<{
   }
 
   return (
-    <div className="h-full flex flex-col">
-      <ChatRoomDetail messages={messages} />
+    <Card className="flex-1 p-0 overflow-hidden">
+      <div className="h-full overflow-y-auto p-4">
+        <List className="border-0 space-y-3">
+          {messages.map((msg) => {
+            const isOwnMessage = msg.nickname === user.nickname;
+            const isActive = onlineParticipants?.find(
+              (id) => id === msg.participantId
+            );
 
-      <Card className="flex-1 p-0 overflow-hidden">
-        <div className="h-full overflow-y-auto p-4">
-          <List className="border-0 space-y-3">
-            {messages.map((msg) => {
-              const isOwnMessage = msg.nickname === user.nickname;
-
-              return (
-                <ListItem
-                  key={msg._id}
-                  className={`
+            return (
+              <ListItem
+                key={msg._id}
+                className={`
                     p-3 border-0
+                    marker:${(!!isActive || isOwnMessage) && "text-green-500"}
                     ${
                       isOwnMessage
                         ? "bg-blue-50 dark:bg-blue-900/20 ml-auto"
@@ -52,11 +53,11 @@ export const RoomMessagesBlock: React.FC<{
                     }
                     max-w-[80%] rounded-2xl
                   `}
-                >
-                  <div className="flex flex-col gap-1">
-                    <div className="flex justify-between items-center">
-                      <span
-                        className={`
+              >
+                <div className="flex flex-col gap-1">
+                  <div className="flex justify-between items-center">
+                    <span
+                      className={`
                         text-xs font-medium
                         ${
                           isOwnMessage
@@ -64,47 +65,46 @@ export const RoomMessagesBlock: React.FC<{
                             : "text-gray-600 dark:text-gray-300"
                         }
                       `}
-                      >
-                        {msg.nickname}
-                        {isOwnMessage && " (You)"}
-                      </span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {msg.created
-                          ? new Date(msg.created).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })
-                          : ""}
-                      </span>
-                    </div>
+                    >
+                      {msg.nickname}
+                      {isOwnMessage && " (You)"}
+                    </span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {msg.created
+                        ? new Date(msg.created).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : ""}
+                    </span>
+                  </div>
 
-                    <p
-                      className={`
-                      text-sm mt-1 break-words
+                  <p
+                    className={`
+                      text-sm mt-1
                       ${
                         isOwnMessage
                           ? "text-gray-800 dark:text-gray-200"
                           : "text-gray-700 dark:text-gray-300"
                       }
                     `}
-                    >
-                      {msg.message}
-                    </p>
+                  >
+                    {msg.message}
+                  </p>
 
-                    <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-                      {msg.created
-                        ? new Date(msg.created).toLocaleDateString()
-                        : ""}
-                    </span>
-                  </div>
-                </ListItem>
-              );
-            })}
+                  <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                    {msg.created
+                      ? new Date(msg.created).toLocaleDateString()
+                      : ""}
+                  </span>
+                </div>
+              </ListItem>
+            );
+          })}
 
-            <div ref={messagesEndRef} />
-          </List>
-        </div>
-      </Card>
-    </div>
+          <div ref={messagesEndRef} />
+        </List>
+      </div>
+    </Card>
   );
 };

@@ -4,10 +4,7 @@ import { useSocketContext } from "../../context/socket-context/use-socket-contex
 import { SOCKET_EVENTS } from "../../constants-global/socket-routes";
 import { useParams } from "react-router-dom";
 import { useUserContext } from "../../context/user-context/use-user-context";
-import type {
-  IChatRoomParticipantsEventData,
-  IParticipantJoinedLeftRoomEventData,
-} from "../../context/socket-context/types";
+import type { IParticipantJoinedLeftRoomEventData } from "../../context/socket-context/types";
 
 /* Used in component, while implementing the current room state update */
 export const useChatRoomSocketListener = ({
@@ -16,7 +13,7 @@ export const useChatRoomSocketListener = ({
 }: {
   setMessages: React.Dispatch<React.SetStateAction<IRoomMessage[]>>;
   setOnlineParticipants: React.Dispatch<
-    React.SetStateAction<IChatRoomParticipantsEventData | undefined>
+    React.SetStateAction<string[] | undefined>
   >;
 }) => {
   const { chatId } = useParams<{ chatId: string }>();
@@ -37,9 +34,30 @@ export const useChatRoomSocketListener = ({
     };
 
     const handleParticipantJoinedRoom = (
-      data: IParticipantJoinedLeftRoomEventData
+      eventData: IParticipantJoinedLeftRoomEventData
     ) => {
-      console.log(8888888, data);
+      const { message, data } = eventData;
+      console.log(message);
+
+      setOnlineParticipants((current) => {
+        if (!current) return;
+        if (!current?.includes(data?.userId)) {
+          return [...current, data?.userId];
+        }
+        return current;
+      });
+    };
+
+    const handleParticipantLeftRoom = (
+      eventData: IParticipantJoinedLeftRoomEventData
+    ) => {
+      const { message, data } = eventData;
+      console.log(message);
+      setOnlineParticipants((current) => {
+        if (!current) return [];
+
+        return current.filter((id) => id !== data.userId);
+      });
     };
 
     addSocketEventListener<IRoomMessage>(
@@ -52,6 +70,11 @@ export const useChatRoomSocketListener = ({
       handleParticipantJoinedRoom
     );
 
+    addSocketEventListener<IParticipantJoinedLeftRoomEventData>(
+      SOCKET_EVENTS.PARTICIPANT_LEFT_ROOM,
+      handleParticipantLeftRoom
+    );
+
     return () => {
       removeSocketEventListener<IRoomMessage>(
         SOCKET_EVENTS.CHAT_ROOM_MESSAGE,
@@ -60,6 +83,11 @@ export const useChatRoomSocketListener = ({
       removeSocketEventListener<IParticipantJoinedLeftRoomEventData>(
         SOCKET_EVENTS.PARTICIPANT_JOINED_ROOM,
         handleParticipantJoinedRoom
+      );
+
+      removeSocketEventListener<IParticipantJoinedLeftRoomEventData>(
+        SOCKET_EVENTS.PARTICIPANT_LEFT_ROOM,
+        handleParticipantLeftRoom
       );
     };
   }, [

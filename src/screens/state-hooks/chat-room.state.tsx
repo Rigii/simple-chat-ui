@@ -29,8 +29,6 @@ export const useChatRoomState = () => {
         chunkLimit: 200,
       });
 
-      console.log(11122333, initialRoomDetails);
-
       setMessages(initialRoomDetails.messages);
       setOnlineParticipants(initialRoomDetails.activeParticipants);
     };
@@ -44,12 +42,11 @@ export const useChatRoomState = () => {
     }
   }, [user, navigate]);
 
-  console.log(11117777, onlineParticipants);
-
   return {
     user,
     messages,
     currentRoom,
+    onlineParticipants,
     setMessages,
     setOnlineParticipants,
   };

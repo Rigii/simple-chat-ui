@@ -9,9 +9,13 @@ import type { IRoomMessage } from "../../../context/chat-context/types";
 
 interface ChatRoomDetailProps {
   messages: IRoomMessage[];
+  onlineParticipants: string[] | undefined;
 }
 
-export const ChatRoomDetail: React.FC<ChatRoomDetailProps> = ({ messages }) => {
+export const ChatRoomDetail: React.FC<ChatRoomDetailProps> = ({
+  messages,
+  onlineParticipants,
+}) => {
   const { chatId } = useParams<{ chatId: string }>();
   const navigate = useNavigate();
   const { getRoomById } = useChatContext();
@@ -43,7 +47,7 @@ export const ChatRoomDetail: React.FC<ChatRoomDetailProps> = ({ messages }) => {
             {messages.length} message{messages.length !== 1 ? "s" : ""}
           </span>
           <span className="text-sm text-gray-500">
-            {`${strings.participiants} ${chatRoom.participants.length}/${chatRoom.participants.length}`}
+            {`${strings.participiants} ${onlineParticipants?.length}/${chatRoom.participants.length}`}
           </span>
           <span className="text-sm text-gray-500">
             {strings.created}:{" "}
