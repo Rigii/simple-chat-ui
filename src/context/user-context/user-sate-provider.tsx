@@ -12,8 +12,6 @@ export const UserStateProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const onSetUser = (userData: IUserDataValues) => {
-    const hashedPassword = btoa(userData.password);
-    userData.password = hashedPassword;
     setUser(userData);
     userLocalStorageStore(userData);
   };

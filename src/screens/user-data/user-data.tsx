@@ -10,7 +10,7 @@ import {
 import * as Yup from "yup";
 import { Label, TextInput, Button } from "flowbite-react";
 import { strings } from "./user-data.strings";
-import type { IProps, IUserDataValues } from "./user-data.types";
+import type { IPostUserData } from "./user-data.types";
 import { postUserData } from "./user-data.api";
 import { useUserContext } from "../../context/user-context/use-user-context";
 import { useNavigate } from "react-router-dom";
@@ -21,29 +21,27 @@ const validationSchema = Yup.object({
   nickname: Yup.string()
     .min(3, "Nickname must be at least 3 characters")
     .required("Nickname is required"),
-  password: Yup.string()
-    .min(8, "Password must be at least 8 characters")
-    .required("Password is required"),
 });
 
-export default function SignUp({ initialValues }: IProps): JSX.Element {
+export default function SignUp(): JSX.Element {
   const { user, setUser } = useUserContext();
   const navigate = useNavigate();
 
-  const baseValues: IUserDataValues = {
+  const baseValues: IPostUserData = {
     email: user?.email ?? "",
     nickname: user?.nickname ?? "",
-    password: user?.password ?? "",
-    ...initialValues,
   };
 
   const onSubmit = async (
-    values: IUserDataValues,
-    { setSubmitting }: FormikHelpers<IUserDataValues>
+    values: IPostUserData,
+    { setSubmitting }: FormikHelpers<IPostUserData>
   ) => {
     try {
-      await postUserData(values);
-      setUser(values);
+      const responce = await postUserData(values);
+      if (!responce._id) {
+        return;
+      }
+      setUser({ ...values, _id: responce._id });
     } catch (error) {
       console.error(strings.errorSubmittingUserData, error);
     } finally {
@@ -100,27 +98,6 @@ export default function SignUp({ initialValues }: IProps): JSX.Element {
               </Field>
               <ErrorMessage
                 name="nickname"
-                component="div"
-                className="text-sm text-red-500 mt-1"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="password">{strings.passwordLabel}</Label>
-              <Field name="password">
-                {({ field }: FieldProps) => (
-                  <TextInput
-                    {...field}
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    required
-                    className="mt-1"
-                  />
-                )}
-              </Field>
-              <ErrorMessage
-                name="password"
                 component="div"
                 className="text-sm text-red-500 mt-1"
               />

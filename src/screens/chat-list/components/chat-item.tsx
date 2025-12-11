@@ -4,12 +4,12 @@ import type { IChatRoom } from "../../../context/chat-context/types";
 
 export const ChatItem: React.FC<{
   chat: IChatRoom;
-  onClick?: (chat: IChatRoom) => void;
+  onClick: (chat: IChatRoom) => void;
 }> = ({ chat, onClick }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      onClick?.(chat);
+      onClick(chat);
     }
   };
 
@@ -17,7 +17,7 @@ export const ChatItem: React.FC<{
     <div
       role="button"
       tabIndex={0}
-      onClick={() => onClick?.(chat)}
+      onClick={() => onClick(chat)}
       onKeyDown={handleKeyDown}
       className="flex items-center justify-between gap-3 p-3 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-300 cursor-pointer"
     >

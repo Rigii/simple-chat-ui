@@ -10,15 +10,16 @@ import { useChatContext } from "../../context/chat-context/use-chat-context";
 
 export const ChatList: React.FC = () => {
   const { user } = useUserContext();
-  const { rooms = [], setAllRooms } = useChatContext();
+  const { rooms = [], setAllRooms, setActiveRoomId } = useChatContext();
   const navigate = useNavigate();
 
   const onItemClick = (chat: IChatRoom) => {
-    console.log("Chat clicked:", chat);
+    setActiveRoomId(chat._id);
+    navigate(`${SCREEN_ROUTES.CHAT_LIST}/${chat._id}`);
   };
 
   useEffect(() => {
-    if (!user?.nickname) {
+    if (!user?._id) {
       navigate(SCREEN_ROUTES.USER_AUTH);
     }
   }, [user, navigate]);
