@@ -6,13 +6,14 @@ import { useUserContext } from "../context/user-context/use-user-context";
 import { SecurityRoute } from "./security-route";
 import SignUp from "../screens/user-data/user-data";
 import { ChatRoom } from "../screens/chat-room/chat-room";
+import { AppNavbar } from "./navbar";
 
 export const AppNavigation = () => {
   const { user } = useUserContext();
 
   return (
     <div>
-      {/* <Navbar /> */}
+      <AppNavbar />
       <Routes>
         <Route path={SCREEN_ROUTES.USER_AUTH} element={<SignUp />} />
         <Route

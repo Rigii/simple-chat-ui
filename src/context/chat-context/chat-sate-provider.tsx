@@ -117,7 +117,7 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const getRoomById = (roomId: string): IChatRoom | undefined => {
-    return rooms?.find((room) => room._id === roomId);
+    return userJoinedRooms?.find((room) => room._id === roomId);
   };
 
   useEffect(() => {

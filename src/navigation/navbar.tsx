@@ -1,0 +1,29 @@
+import { useUserContext } from "../context/user-context/use-user-context";
+import { Button, Navbar } from "flowbite-react";
+import { HiBackspace } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
+import { SCREEN_ROUTES } from "../constants-global/screen-routes";
+
+export const AppNavbar = () => {
+  const { user } = useUserContext();
+
+  const navigate = useNavigate(); // ← Get navigate function
+
+  const logout = () => {
+    localStorage.clear();
+    navigate(SCREEN_ROUTES.USER_AUTH);
+  };
+
+  return (
+    <div>
+      <Navbar>
+        <div className="flex flex-row justify-between items-center w-full">
+          <div>{user?.nickname}</div>
+          <Button onClick={logout} className="px-4 border">
+            <HiBackspace className="h-5 w-5" />
+          </Button>
+        </div>
+      </Navbar>
+    </div>
+  );
+};

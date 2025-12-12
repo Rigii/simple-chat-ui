@@ -19,7 +19,6 @@ export const ChatRoomDetail: React.FC<ChatRoomDetailProps> = ({
   const { chatId } = useParams<{ chatId: string }>();
   const navigate = useNavigate();
   const { getRoomById } = useChatContext();
-
   const chatRoom = getRoomById(chatId || "");
 
   if (!chatRoom) {
