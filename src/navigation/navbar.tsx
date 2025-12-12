@@ -1,13 +1,17 @@
 import { useUserContext } from "../context/user-context/use-user-context";
 import { Button, Navbar } from "flowbite-react";
 import { HiBackspace } from "react-icons/hi";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { SCREEN_ROUTES } from "../constants-global/screen-routes";
 
 export const AppNavbar = () => {
   const { user } = useUserContext();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); // ← Get navigate function
+  if (location?.pathname === SCREEN_ROUTES.USER_AUTH) {
+    return;
+  }
 
   const logout = () => {
     localStorage.clear();
