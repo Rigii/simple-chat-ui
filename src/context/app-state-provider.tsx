@@ -4,7 +4,11 @@ import { ChatStateProvider } from "./chat-context/chat-sate-provider";
 import { SocketProvider } from "./socket-context/socket-context-provider";
 
 export function AppProviders({ children }: { children: ReactNode }) {
-  return [UserStateProvider, ChatStateProvider].reduce((wrapped, Provider) => {
-    return <Provider>{<SocketProvider>{wrapped}</SocketProvider>}</Provider>;
-  }, children);
+  return (
+    <UserStateProvider>
+      <ChatStateProvider>
+        <SocketProvider>{children}</SocketProvider>
+      </ChatStateProvider>
+    </UserStateProvider>
+  );
 }

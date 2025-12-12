@@ -42,14 +42,14 @@ export interface IChatRoom {
 }
 
 export interface IChatContext {
-  rooms: IChatRoom[] | null;
+  rooms: IChatRoom[] | [];
+  userJoinedRooms: IChatRoom[] | [];
   activeRoomId?: string | null;
   setActiveRoomId: React.Dispatch<React.SetStateAction<string | null>>;
   getActiveRoom: (roomId: string) => IChatRoom | undefined;
-  setRoom: (room: IChatRoom) => void;
-  setAllRooms: (rooms: IChatRoom[]) => void;
   addParticipantToRoom?: (roomId: string, participant: IChatUser) => void;
   removeParticipantFromRoom?: (roomId: string, userId: string) => void;
   getRoomById: (roomId: string) => IChatRoom | undefined;
   clearAllRooms?: () => void;
+  joinRoom: (roomId: string) => Promise<void>;
 }

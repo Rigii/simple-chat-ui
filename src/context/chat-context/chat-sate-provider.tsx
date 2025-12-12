@@ -1,83 +1,79 @@
 import { useState, useEffect, type ReactNode } from "react";
 import { ChatContext } from "./chat-context";
 import type { IChatRoom, IChatUser } from "./types";
+import { getAllChats } from "../../screens/chat-list/chat-list.api";
+import { useUserContext } from "../user-context/use-user-context";
+import { joinChatRoomsAPI } from "../../screens/chat-room/api/chat-room.api";
+import { LOCAL_STORAGE_NAMESPACES } from "../../constants-global/storage-namespaces";
+import { strings } from "../../screens/chat-list/strings";
 
 export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
+  const { user } = useUserContext();
+
   const chatLocalStorageStore = (rooms: IChatRoom[] | null) => {
-    localStorage.setItem("chatRooms", JSON.stringify(rooms));
+    localStorage.setItem(
+      LOCAL_STORAGE_NAMESPACES.userJoinedChatRooms,
+      JSON.stringify(rooms)
+    );
   };
 
-  const chatLocalStorageRetrieve = (): IChatRoom[] | null => {
-    const stored = localStorage.getItem("chatRooms");
+  const roomsLocalStorageRetrieve = (name: string): IChatRoom[] | null => {
+    const stored = localStorage.getItem(name);
     return stored ? JSON.parse(stored) : null;
   };
 
-  const [rooms, setRooms] = useState<IChatRoom[] | null>(() => {
-    const storedRooms = chatLocalStorageRetrieve();
+  const [rooms, setRooms] = useState<IChatRoom[]>([]);
+
+  const [userJoinedRooms, setUserJoinedRooms] = useState<IChatRoom[]>(() => {
+    const storedRooms =
+      roomsLocalStorageRetrieve(LOCAL_STORAGE_NAMESPACES.userJoinedChatRooms) ||
+      [];
     return storedRooms;
   });
-
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (rooms !== null) {
-      chatLocalStorageStore(rooms);
+    if (userJoinedRooms !== null) {
+      chatLocalStorageStore(userJoinedRooms);
     }
-  }, [rooms]);
+  }, [userJoinedRooms]);
 
-  const setRoom = (room: IChatRoom) => {
-    setRooms((prevRooms) => {
-      if (!prevRooms) {
-        return [room];
-      }
+  const joinRoom = async (roomId: string) => {
+    try {
+      if (!user?._id) return;
 
-      const existingIndex = prevRooms.findIndex((r) => r._id === room._id);
+      await joinChatRoomsAPI({ roomId: roomId, userId: user._id });
 
-      if (existingIndex >= 0) {
-        const updatedRooms = [...prevRooms];
-        updatedRooms[existingIndex] = {
-          ...updatedRooms[existingIndex],
-          ...room,
-          updated: new Date(),
-        };
-        return updatedRooms;
-      } else {
-        return [
-          ...prevRooms,
-          { ...room, created: new Date(), updated: new Date() },
-        ];
-      }
-    });
-  };
+      setRooms((prevRooms) => {
+        if (!prevRooms) return prevRooms;
+        return prevRooms.filter((room) => room._id !== roomId);
+      });
 
-  const setAllRooms = (newRooms: IChatRoom[]) => {
-    setRooms(newRooms);
+      setUserJoinedRooms((prevJoinedRooms) => {
+        const joinedRoom = rooms?.find((room) => room._id === roomId);
+
+        if (!joinedRoom) return prevJoinedRooms;
+
+        if (!prevJoinedRooms) return [joinedRoom];
+
+        const roomExists = prevJoinedRooms.some((room) => room._id === roomId);
+
+        if (roomExists) return prevJoinedRooms;
+
+        return [...prevJoinedRooms, joinedRoom];
+      });
+    } catch (error) {
+      console.error(strings.errorJoiningRoom, error);
+    }
   };
 
   const getActiveRoom = (roomId: string): IChatRoom | undefined => {
-    return rooms?.find((room) => room._id === roomId);
+    return userJoinedRooms?.find((room) => room._id === roomId);
   };
 
-  // const updateRoomLastActivity = (roomId: string) => {
-  //   setRooms((prevRooms) => {
-  //     if (!prevRooms) return null;
-
-  //     return prevRooms.map((room) => {
-  //       if (room.id === roomId) {
-  //         return {
-  //           ...room,
-  //           updatedAt: new Date().toISOString(),
-  //           updated: new Date(),
-  //         };
-  //       }
-  //       return room;
-  //     });
-  //   });
-  // };
-
   const addParticipantToRoom = (roomId: string, participant: IChatUser) => {
-    setRooms((prevRooms) => {
-      if (!prevRooms) return null;
+    setUserJoinedRooms((prevRooms) => {
+      if (!prevRooms?.length) return [];
 
       return prevRooms.map((room) => {
         if (room._id === roomId) {
@@ -99,8 +95,8 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeParticipantFromRoom = (roomId: string, userId: string) => {
-    setRooms((prevRooms) => {
-      if (!prevRooms) return null;
+    setUserJoinedRooms((prevRooms) => {
+      if (!prevRooms) return [];
 
       return prevRooms.map((room) => {
         if (room._id === roomId) {
@@ -116,23 +112,48 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const clearAllRooms = () => {
-    setRooms(null);
-    localStorage.removeItem("chatRooms");
+    setUserJoinedRooms([]);
+    localStorage.removeItem(LOCAL_STORAGE_NAMESPACES.userJoinedChatRooms);
   };
 
   const getRoomById = (roomId: string): IChatRoom | undefined => {
     return rooms?.find((room) => room._id === roomId);
   };
 
+  useEffect(() => {
+    if (!user?._id) return;
+
+    const getInitialChatRooms = async (participantId: string) => {
+      try {
+        const { availableRooms, interlocutorRooms } = await getAllChats({
+          participantId,
+        });
+        const noUserRoomsAvailable = availableRooms.filter(
+          (availableRoom) =>
+            !interlocutorRooms.some(
+              (userRoom) => userRoom._id === availableRoom._id
+            )
+        );
+
+        setRooms(noUserRoomsAvailable);
+        setUserJoinedRooms(interlocutorRooms);
+      } catch (error) {
+        console.error(strings.errorFetchingChatRooms, error);
+      }
+    };
+
+    getInitialChatRooms(user?._id);
+  }, [user?._id]);
+
   return (
     <ChatContext.Provider
       value={{
         rooms,
         activeRoomId,
+        userJoinedRooms,
+        joinRoom,
         setActiveRoomId,
         getActiveRoom,
-        setRoom,
-        setAllRooms,
         addParticipantToRoom,
         removeParticipantFromRoom,
         clearAllRooms,
