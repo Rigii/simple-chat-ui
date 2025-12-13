@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import type { IRoomMessage } from "../../context/chat-context/types";
-import { useSocketContext } from "../../context/socket-context/use-socket-context";
-import { SOCKET_EVENTS } from "../../constants-global/socket-routes";
+import type { IRoomMessage } from "../../../context/chat-context/types";
+import { useSocketContext } from "../../../context/socket-context/use-socket-context";
+import { SOCKET_EVENTS } from "../../../constants-global/socket-routes";
 import { useParams } from "react-router-dom";
-import { useUserContext } from "../../context/user-context/use-user-context";
-import type { IParticipantJoinedLeftRoomEventData } from "../../context/socket-context/types";
+import { useUserContext } from "../../../context/user-context/use-user-context";
+import type { IParticipantJoinedLeftRoomEventData } from "../../../context/socket-context/types";
 
 /* Used in component, while implementing the current room state update */
 export const useChatRoomSocketListener = ({
@@ -38,6 +38,7 @@ export const useChatRoomSocketListener = ({
     ) => {
       const { message, data } = eventData;
       console.log(message);
+      console.log(eventData);
 
       setOnlineParticipants((current) => {
         if (!current) return;

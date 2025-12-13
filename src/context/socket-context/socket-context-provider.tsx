@@ -24,7 +24,6 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
       return;
     }
 
-    // Initialize socket connection
     const socket = io(`${API_ROUTES.BASE_URL}/${CHAT_NAMESPACES.CHAT_ROOM}`, {
       query: {
         userId: user._id,
@@ -37,7 +36,6 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
 
     socketRef.current = socket;
 
-    // Connection events
     socket.on("connect", () => {
       console.log("Socket connected:", socket.id);
       setIsConnected(true);
@@ -53,7 +51,6 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
       setIsConnected(false);
     });
 
-    // Cleanup on unmount
     return () => {
       socket.disconnect();
       socketRef.current = null;

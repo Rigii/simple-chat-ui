@@ -9,10 +9,17 @@ export interface IGetAllChatsResponse {
   updatedAt: string;
 }
 
-export const getAllChats = async (): Promise<IChatRoom[]> => {
+export const getAllChats = async ({
+  participantId,
+}: {
+  participantId: string;
+}): Promise<{
+  availableRooms: IChatRoom[];
+  interlocutorRooms: IChatRoom[];
+}> => {
   const response = await postData({
     requestUrl: API_ROUTES.GET_ALL_CHATS,
-    params: {},
+    params: { participantId },
   });
 
   return response;

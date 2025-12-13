@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
 import { UserStateProvider } from "./user-context/user-sate-provider";
-import { ChatStateProvider } from "./chat-context/chat-sate-provider";
-import { SocketProvider } from "./socket-context/socket-context-provider";
+import { BrowserRouter } from "react-router-dom";
 
-export function AppProviders({ children }: { children: ReactNode }) {
-  return [UserStateProvider, ChatStateProvider].reduce((wrapped, Provider) => {
-    return <Provider>{<SocketProvider>{wrapped}</SocketProvider>}</Provider>;
-  }, children);
+export function AppContextProviders({ children }: { children: ReactNode }) {
+  return (
+    <BrowserRouter>
+      <UserStateProvider>{children}</UserStateProvider>
+    </BrowserRouter>
+  );
 }

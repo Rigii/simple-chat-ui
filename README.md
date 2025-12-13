@@ -1,73 +1,33 @@
-# React + TypeScript + Vite
+# Simple Chat
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Simple Chat** is a multi-room chat application created for demonstration and technology testing purposes.
 
-Currently, two official plugins are available:
+## Start the Application
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Clone the Git repository.
+2. Add a `.env` file with the required environment variables to the root directory.
+3. Install dependencies: `npm install`
+4. Run the app locally: `npm run dev`
+5. When stopping localhost, terminate the connection using: c.
 
-## React Compiler
+**NB!** Always kill the port using `npm run kill` when stopping the application.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## User Flow
 
-## Expanding the ESLint configuration
+1. **Registration**  
+   To use the chat, the user must first register by entering an email and a nickname.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+2. **Join Chat Rooms**  
+   Initially, the user sees a list of available chat rooms.  
+   To get access to a room, the user simply clicks on the chat room item.  
+   This action registers the user in the selected chat room and adds them to the list of interlocutors.  
+   A new chat room card will then appear in the **Joined Rooms** section.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+3. **Enter a Chat Room**  
+   By clicking a chat room card, the user navigates to the selected chat room screen.  
+   At this point, the user joins the chat room via a socket connection.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+The user will be able to:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- write and receive real-time messages
+- review interlocutor statuses

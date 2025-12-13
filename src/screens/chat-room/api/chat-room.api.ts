@@ -38,3 +38,18 @@ export const getRoomDetails = async ({
 
   return response;
 };
+
+export const joinChatRoomsAPI = async ({
+  roomId,
+  userId,
+}: {
+  roomId: string;
+  userId: string;
+}): Promise<IRoomDetails> => {
+  const response = await postData({
+    requestUrl: API_ROUTES.JOIN_CHAT_ROOMS,
+    params: { userId, roomId },
+  });
+
+  return response;
+};
