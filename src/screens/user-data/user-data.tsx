@@ -51,66 +51,70 @@ export default function SignUp(): JSX.Element {
   };
 
   return (
-    <div className="mx-auto p-6 bg-white/80 dark:bg-gray-800 rounded-lg shadow">
-      <h2 className="text-2xl font-semibold mb-4">{strings.getStartedTitle}</h2>
+    <div className="flex flex-1 mx-auto p-6 dark:bg-gray-800 rounded-lg shadow items-center justify-center h-screen">
+      <div className="flex w-xl flex-col">
+        <h2 className="text-2xl font-semibold mb-4">
+          {strings.getStartedTitle}
+        </h2>
 
-      <Formik
-        initialValues={baseValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
-        {({ isSubmitting, isValid }) => (
-          <FormikForm className="space-y-4">
-            <div>
-              <Label htmlFor="email">{strings.emailLabel}</Label>
-              <Field name="email">
-                {({ field }: FieldProps) => (
-                  <TextInput
-                    {...field}
-                    id="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    required
-                    className="mt-1 min-w-sm"
-                  />
-                )}
-              </Field>
-              <ErrorMessage
-                name="email"
-                component="div"
-                className="text-sm text-red-500 mt-1"
-              />
-            </div>
+        <Formik
+          initialValues={baseValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {({ isSubmitting, isValid }) => (
+            <FormikForm className="space-y-4">
+              <div>
+                <Label htmlFor="email">{strings.emailLabel}</Label>
+                <Field name="email">
+                  {({ field }: FieldProps) => (
+                    <TextInput
+                      {...field}
+                      id="email"
+                      type="email"
+                      placeholder="you@example.com"
+                      required
+                      className="mt-1 min-w-sm"
+                    />
+                  )}
+                </Field>
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-sm text-red-500 mt-1"
+                />
+              </div>
 
-            <div>
-              <Label htmlFor="nickname">{strings.nicknameLabel}</Label>
-              <Field name="nickname">
-                {({ field }: FieldProps) => (
-                  <TextInput
-                    {...field}
-                    id="nickname"
-                    type="text"
-                    placeholder="Your display name"
-                    required
-                    className="mt-1"
-                  />
-                )}
-              </Field>
-              <ErrorMessage
-                name="nickname"
-                component="div"
-                className="text-sm text-red-500 mt-1"
-              />
-            </div>
+              <div>
+                <Label htmlFor="nickname">{strings.nicknameLabel}</Label>
+                <Field name="nickname">
+                  {({ field }: FieldProps) => (
+                    <TextInput
+                      {...field}
+                      id="nickname"
+                      type="text"
+                      placeholder="Your display name"
+                      required
+                      className="mt-1"
+                    />
+                  )}
+                </Field>
+                <ErrorMessage
+                  name="nickname"
+                  component="div"
+                  className="text-sm text-red-500 mt-1"
+                />
+              </div>
 
-            <div className="pt-2">
-              <Button type="submit" disabled={isSubmitting || !isValid}>
-                {isSubmitting ? "Saving..." : "Continue"}
-              </Button>
-            </div>
-          </FormikForm>
-        )}
-      </Formik>
+              <div className="pt-2">
+                <Button type="submit" disabled={isSubmitting || !isValid}>
+                  {isSubmitting ? "Saving..." : "Continue"}
+                </Button>
+              </div>
+            </FormikForm>
+          )}
+        </Formik>
+      </div>
     </div>
   );
 }
