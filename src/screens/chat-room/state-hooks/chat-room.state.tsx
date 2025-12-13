@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import type { IRoomMessage } from "../../context/chat-context/types";
-import { useUserContext } from "../../context/user-context/use-user-context";
-import { useChatContext } from "../../context/chat-context/use-chat-context";
-import { getRoomDetails } from "../chat-room/api/chat-room.api";
+import type { IRoomMessage } from "../../../context/chat-context/types";
+import { useUserContext } from "../../../context/user-context/use-user-context";
+import { useChatContext } from "../../../context/chat-context/use-chat-context";
+import { getRoomDetails } from "../api/chat-room.api";
 import { useNavigate, useParams } from "react-router-dom";
-import { SCREEN_ROUTES } from "../../constants-global/screen-routes";
+import { SCREEN_ROUTES } from "../../../constants-global/screen-routes";
 
 export const useChatRoomState = () => {
   const navigate = useNavigate();
