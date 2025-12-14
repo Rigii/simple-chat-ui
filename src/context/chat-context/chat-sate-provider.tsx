@@ -67,46 +67,6 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
     return userJoinedRooms?.find((room) => room._id === roomId);
   };
 
-  // const addParticipantToRoom = (roomId: string, participant: IChatUser) => {
-  //   setUserJoinedRooms((prevRooms) => {
-  //     if (!prevRooms) return [];
-
-  //     return prevRooms.map((room) => {
-  //       if (room._id === roomId) {
-  //         const participantExists = room.participants.some(
-  //           (p) => p._id === participant._id
-  //         );
-
-  //         if (!participantExists) {
-  //           return {
-  //             ...room,
-  //             participants: [...room.participants, participant],
-  //             updated: new Date(),
-  //           };
-  //         }
-  //       }
-  //       return room;
-  //     });
-  //   });
-  // };
-
-  // const removeParticipantFromRoom = (roomId: string, userId: string) => {
-  //   setUserJoinedRooms((prevRooms) => {
-  //     if (!prevRooms) return [];
-
-  //     return prevRooms.map((room) => {
-  //       if (room._id === roomId) {
-  //         return {
-  //           ...room,
-  //           participants: room.participants.filter((p) => p._id !== userId),
-  //           updated: new Date(),
-  //         };
-  //       }
-  //       return room;
-  //     });
-  //   });
-  // };
-
   const clearAllRooms = () => {
     setUserJoinedRooms([]);
     localStorage.removeItem(LOCAL_STORAGE_NAMESPACES.userJoinedChatRooms);
