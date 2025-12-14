@@ -61,7 +61,7 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
   const joinRoom = useCallback((roomId: string) => {
     if (socketRef.current) {
       socketRef.current.emit(SOCKET_EVENTS.JOIN_CHAT, roomId);
-      console.log(`Joined room: ${roomId}`);
+      console.log(`${strings.joinedRoom} ${roomId}`);
     }
   }, []);
 
