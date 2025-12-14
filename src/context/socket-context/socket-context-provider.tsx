@@ -8,6 +8,7 @@ import {
 } from "../../constants-global/socket-routes";
 import type { ISocketProviderProps } from "./types";
 import { SocketContext } from "./socket-context";
+import { strings } from "./strings";
 
 export const SocketProvider = ({ children }: ISocketProviderProps) => {
   const [isConnected, setIsConnected] = useState(false);
@@ -36,18 +37,18 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
 
     socketRef.current = socket;
 
-    socket.on("connect", () => {
-      console.log("Socket connected:", socket.id);
+    socket.on(SOCKET_EVENTS.CONNECT, () => {
+      console.log(strings.socketConnected, socket.id);
       setIsConnected(true);
     });
 
-    socket.on("connect_error", (error) => {
-      console.error("Socket connection error:", error);
+    socket.on(SOCKET_EVENTS.CONNECT_ERROR, (error) => {
+      console.error(strings.socketConnectionError, error);
       setIsConnected(false);
     });
 
-    socket.on("disconnect", (reason) => {
-      console.log("Socket disconnected:", reason);
+    socket.on(SOCKET_EVENTS.DISCONNECT, (reason) => {
+      console.log(strings.socketDisconnected, reason);
       setIsConnected(false);
     });
 
@@ -61,13 +62,6 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
     if (socketRef.current) {
       socketRef.current.emit(SOCKET_EVENTS.JOIN_CHAT, roomId);
       console.log(`Joined room: ${roomId}`);
-    }
-  }, []);
-
-  const leaveRoom = useCallback((roomId: string) => {
-    if (socketRef.current) {
-      socketRef.current.emit("leave-room", roomId);
-      console.log(`Left room: ${roomId}`);
     }
   }, []);
 
@@ -110,7 +104,6 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
   const value = {
     isConnected,
     joinRoom,
-    leaveRoom,
     sendMessage,
     addSocketEventListener,
     removeSocketEventListener,

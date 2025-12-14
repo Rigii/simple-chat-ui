@@ -1,7 +1,6 @@
 export interface ISocketContextType {
   isConnected: boolean;
   joinRoom: (roomId: string) => void;
-  leaveRoom: (roomId: string) => void;
   sendMessage: (
     roomId: string,
     message: string,
