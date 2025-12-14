@@ -47,7 +47,6 @@ export interface IChatContext {
   activeRoomId?: string | null;
   setActiveRoomId: React.Dispatch<React.SetStateAction<string | null>>;
   getActiveRoom: (roomId: string) => IChatRoom | undefined;
-  addParticipantToRoom?: (roomId: string, participant: IChatUser) => void;
   removeParticipantFromRoom?: (roomId: string, userId: string) => void;
   getRoomById: (roomId: string) => IChatRoom | undefined;
   clearAllRooms?: () => void;

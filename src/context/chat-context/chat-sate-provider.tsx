@@ -1,6 +1,6 @@
 import { useState, useEffect, type ReactNode } from "react";
 import { ChatContext } from "./chat-context";
-import type { IChatRoom, IChatUser } from "./types";
+import type { IChatRoom } from "./types";
 import { getAllChats } from "../../screens/chat-list/chat-list.api";
 import { useUserContext } from "../user-context/use-user-context";
 import { joinChatRoomsAPI } from "../../screens/chat-room/api/chat-room.api";
@@ -48,11 +48,7 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
 
       removeRoomFromAvailableList(currentRoomData);
 
-      addParticipantToRoom(currentRoomData._id, {
-        _id: user._id,
-        nickname: user.nickname,
-        role: "user",
-      });
+      setUserJoinedRooms((joinedRooms) => [...joinedRooms, currentRoomData]);
 
       addRoomIdToLocalUserData(roomId);
     } catch (error) {
@@ -71,45 +67,45 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
     return userJoinedRooms?.find((room) => room._id === roomId);
   };
 
-  const addParticipantToRoom = (roomId: string, participant: IChatUser) => {
-    setUserJoinedRooms((prevRooms) => {
-      if (!prevRooms?.length) return [];
+  // const addParticipantToRoom = (roomId: string, participant: IChatUser) => {
+  //   setUserJoinedRooms((prevRooms) => {
+  //     if (!prevRooms) return [];
 
-      return prevRooms.map((room) => {
-        if (room._id === roomId) {
-          const participantExists = room.participants.some(
-            (p) => p._id === participant._id
-          );
+  //     return prevRooms.map((room) => {
+  //       if (room._id === roomId) {
+  //         const participantExists = room.participants.some(
+  //           (p) => p._id === participant._id
+  //         );
 
-          if (!participantExists) {
-            return {
-              ...room,
-              participants: [...room.participants, participant],
-              updated: new Date(),
-            };
-          }
-        }
-        return room;
-      });
-    });
-  };
+  //         if (!participantExists) {
+  //           return {
+  //             ...room,
+  //             participants: [...room.participants, participant],
+  //             updated: new Date(),
+  //           };
+  //         }
+  //       }
+  //       return room;
+  //     });
+  //   });
+  // };
 
-  const removeParticipantFromRoom = (roomId: string, userId: string) => {
-    setUserJoinedRooms((prevRooms) => {
-      if (!prevRooms) return [];
+  // const removeParticipantFromRoom = (roomId: string, userId: string) => {
+  //   setUserJoinedRooms((prevRooms) => {
+  //     if (!prevRooms) return [];
 
-      return prevRooms.map((room) => {
-        if (room._id === roomId) {
-          return {
-            ...room,
-            participants: room.participants.filter((p) => p._id !== userId),
-            updated: new Date(),
-          };
-        }
-        return room;
-      });
-    });
-  };
+  //     return prevRooms.map((room) => {
+  //       if (room._id === roomId) {
+  //         return {
+  //           ...room,
+  //           participants: room.participants.filter((p) => p._id !== userId),
+  //           updated: new Date(),
+  //         };
+  //       }
+  //       return room;
+  //     });
+  //   });
+  // };
 
   const clearAllRooms = () => {
     setUserJoinedRooms([]);
@@ -154,8 +150,6 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
         joinRoom,
         setActiveRoomId,
         getActiveRoom,
-        addParticipantToRoom,
-        removeParticipantFromRoom,
         clearAllRooms,
         getRoomById,
       }}

@@ -6,7 +6,6 @@ const defaultChatContext: IChatContext = {
   activeRoomId: null,
   userJoinedRooms: [],
   setActiveRoomId: () => {},
-  addParticipantToRoom: () => {},
   removeParticipantFromRoom: () => {},
   getRoomById: () => undefined,
   clearAllRooms: () => {},
