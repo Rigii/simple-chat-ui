@@ -1,6 +1,6 @@
 import { useState, useEffect, type ReactNode } from "react";
 import { ChatContext } from "./chat-context";
-import type { IChatRoom } from "./types";
+import type { IChatRoom, IChatUser } from "./types";
 import { getAllChats } from "../../screens/chat-list/chat-list.api";
 import { useUserContext } from "../user-context/use-user-context";
 import { joinChatRoomsAPI } from "../../screens/chat-room/api/chat-room.api";
@@ -30,12 +30,6 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
     return storedRooms;
   });
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (userJoinedRooms !== null) {
-      chatLocalStorageStore(userJoinedRooms);
-    }
-  }, [userJoinedRooms]);
 
   const joinRoom = async (roomId: string) => {
     try {
@@ -67,6 +61,29 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
     return userJoinedRooms?.find((room) => room._id === roomId);
   };
 
+  const addParticipantToRoom = (roomId: string, participant: IChatUser) => {
+    setUserJoinedRooms((prevRooms) => {
+      if (!prevRooms) return [];
+
+      return prevRooms.map((room) => {
+        if (room._id === roomId) {
+          const participantExists = room.participants.some(
+            (p) => p._id === participant._id
+          );
+
+          if (!participantExists) {
+            return {
+              ...room,
+              participants: [...room.participants, participant],
+              updated: new Date(),
+            };
+          }
+        }
+        return room;
+      });
+    });
+  };
+
   const clearAllRooms = () => {
     setUserJoinedRooms([]);
     localStorage.removeItem(LOCAL_STORAGE_NAMESPACES.userJoinedChatRooms);
@@ -75,6 +92,12 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
   const getRoomById = (roomId: string): IChatRoom | undefined => {
     return userJoinedRooms?.find((room) => room._id === roomId);
   };
+
+  useEffect(() => {
+    if (userJoinedRooms !== null) {
+      chatLocalStorageStore(userJoinedRooms);
+    }
+  }, [userJoinedRooms]);
 
   useEffect(() => {
     if (!user?._id) return;
@@ -107,6 +130,7 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
         rooms,
         activeRoomId,
         userJoinedRooms,
+        addParticipantToRoom,
         joinRoom,
         setActiveRoomId,
         getActiveRoom,

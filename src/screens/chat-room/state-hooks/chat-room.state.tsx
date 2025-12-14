@@ -12,7 +12,7 @@ export const useChatRoomState = () => {
   const { chatId } = useParams<{ chatId: string }>();
 
   const { user } = useUserContext();
-  const { getActiveRoom } = useChatContext();
+  const { getActiveRoom, addParticipantToRoom } = useChatContext();
   const [messages, setMessages] = useState<IRoomMessage[]>([]);
   const [onlineParticipants, setOnlineParticipants] = useState<string[]>();
 
@@ -22,19 +22,21 @@ export const useChatRoomState = () => {
     if (!user?._id || !currentRoom?._id) {
       return;
     }
-    const fetchRoomDetails = async () => {
-      const initialRoomDetails = await getRoomDetails({
+    (async () => {
+      const { messages, roomData, activeParticipants } = await getRoomDetails({
         chatRoomId: currentRoom._id,
         userId: user._id,
         chunkLimit: 200,
       });
 
-      setMessages(initialRoomDetails.messages);
-      setOnlineParticipants(initialRoomDetails.activeParticipants);
-    };
+      setMessages(messages);
+      setOnlineParticipants(activeParticipants);
 
-    fetchRoomDetails();
-  }, [user?._id, currentRoom?._id]);
+      roomData.participants.forEach((participiantId) => {
+        addParticipantToRoom(roomData._id, participiantId);
+      });
+    })();
+  }, [user?._id, currentRoom?._id, addParticipantToRoom]);
 
   useEffect(() => {
     if (!user?._id) {

@@ -36,9 +36,7 @@ export const useChatRoomSocketListener = ({
     const handleParticipantJoinedRoom = (
       eventData: IParticipantJoinedLeftRoomEventData
     ) => {
-      const { message, data } = eventData;
-      console.log(message);
-      console.log(eventData);
+      const { data } = eventData;
 
       setOnlineParticipants((current) => {
         if (!current) return;
@@ -52,8 +50,7 @@ export const useChatRoomSocketListener = ({
     const handleParticipantLeftRoom = (
       eventData: IParticipantJoinedLeftRoomEventData
     ) => {
-      const { message, data } = eventData;
-      console.log(message);
+      const { data } = eventData;
       setOnlineParticipants((current) => {
         if (!current) return [];
 
