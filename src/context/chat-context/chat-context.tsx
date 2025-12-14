@@ -11,6 +11,7 @@ const defaultChatContext: IChatContext = {
   clearAllRooms: () => {},
   getActiveRoom: () => undefined,
   joinRoom: async () => {},
+  addParticipantToRoom: () => {},
 };
 
 export const ChatContext = createContext<IChatContext>(defaultChatContext);

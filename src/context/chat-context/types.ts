@@ -31,6 +31,7 @@ export interface IRoomMessage {
 export interface IRoomDetails {
   messages: IRoomMessage[];
   activeParticipants: string[];
+  roomData: IChatRoom;
 }
 
 export interface IChatRoom {
@@ -51,4 +52,5 @@ export interface IChatContext {
   getRoomById: (roomId: string) => IChatRoom | undefined;
   clearAllRooms?: () => void;
   joinRoom: (roomId: string) => Promise<void>;
+  addParticipantToRoom: (roomId: string, participant: IChatUser) => void;
 }
