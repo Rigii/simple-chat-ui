@@ -8,7 +8,9 @@ export const UserStateProvider = ({ children }: { children: ReactNode }) => {
   const userLocalStorageRetrieve = localStorage.getItem("userData");
 
   const [user, setUser] = useState<IUserDataValues | null>(
-    userLocalStorageRetrieve ? JSON.parse(userLocalStorageRetrieve) : null
+    userLocalStorageRetrieve
+      ? JSON.parse(userLocalStorageRetrieve)
+      : { email: "", nickname: "", rooms: [], role: "user", _id: "" }
   );
 
   const onSetUser = (userData: IUserDataValues) => {
@@ -16,20 +18,22 @@ export const UserStateProvider = ({ children }: { children: ReactNode }) => {
     userLocalStorageStore(userData);
   };
 
-  const onLogoutUserData = () => {
-    const updatedUserData = {
-      ...user,
-      outlookCalendar: {},
-      zoho: {},
-    } as unknown as IUserDataValues;
+  const addRoomIdToLocalUserData = (roomId: string) => {
+    setUser((currentUser) => {
+      if (!currentUser || currentUser?.rooms?.includes(roomId))
+        return currentUser;
 
-    onSetUser(updatedUserData);
+      const updatedUserData = {
+        ...currentUser,
+        rooms: [...currentUser.rooms, roomId],
+      };
+      userLocalStorageStore(updatedUserData);
+      return updatedUserData;
+    });
   };
 
   return (
-    <UserContext.Provider
-      value={{ user, setUser: onSetUser, onLogoutUserData }}
-    >
+    <UserContext.Provider value={{ user, onSetUser, addRoomIdToLocalUserData }}>
       {children}
     </UserContext.Provider>
   );

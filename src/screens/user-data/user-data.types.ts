@@ -1,6 +1,8 @@
 export interface IUserDataValues {
   email: string;
   nickname: string;
+  rooms: string[];
+  role: string;
   _id: string;
 }
 

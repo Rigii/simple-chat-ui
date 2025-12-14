@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
 });
 
 export default function SignUp(): JSX.Element {
-  const { user, setUser } = useUserContext();
+  const { user, onSetUser } = useUserContext();
   const navigate = useNavigate();
 
   const baseValues: IPostUserData = {
@@ -41,7 +41,8 @@ export default function SignUp(): JSX.Element {
       if (!responce._id) {
         return;
       }
-      setUser({ ...values, _id: responce._id });
+
+      onSetUser(responce);
     } catch (error) {
       console.error(strings.errorSubmittingUserData, error);
     } finally {

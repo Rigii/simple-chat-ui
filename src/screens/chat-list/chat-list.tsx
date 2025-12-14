@@ -19,8 +19,8 @@ export const ChatList: React.FC = () => {
     navigate(`${SCREEN_ROUTES.CHAT_LIST}/${chat._id}`);
   };
 
-  const onJoin = (chat: IChatRoom) => {
-    joinRoom(chat._id);
+  const onJoin = async (chat: IChatRoom) => {
+    await joinRoom(chat._id);
   };
 
   useEffect(() => {

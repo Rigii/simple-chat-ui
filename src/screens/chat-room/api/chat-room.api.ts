@@ -1,5 +1,7 @@
 import { API_ROUTES } from "../../../constants-global/api-routes";
 import type {
+  IChatRoom,
+  IChatUser,
   IRoomDetails,
   IRoomMessage,
 } from "../../../context/chat-context/types";
@@ -45,7 +47,7 @@ export const joinChatRoomsAPI = async ({
 }: {
   roomId: string;
   userId: string;
-}): Promise<IRoomDetails> => {
+}): Promise<{ currentRoomData: IChatRoom; currentUserData: IChatUser }> => {
   const response = await postData({
     requestUrl: API_ROUTES.JOIN_CHAT_ROOMS,
     params: { userId, roomId },

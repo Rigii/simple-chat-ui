@@ -8,7 +8,7 @@ import { LOCAL_STORAGE_NAMESPACES } from "../../constants-global/storage-namespa
 import { strings } from "../../screens/chat-list/strings";
 
 export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
-  const { user } = useUserContext();
+  const { user, addRoomIdToLocalUserData } = useUserContext();
 
   const chatLocalStorageStore = (rooms: IChatRoom[] | null) => {
     localStorage.setItem(
@@ -23,7 +23,6 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const [rooms, setRooms] = useState<IChatRoom[]>([]);
-
   const [userJoinedRooms, setUserJoinedRooms] = useState<IChatRoom[]>(() => {
     const storedRooms =
       roomsLocalStorageRetrieve(LOCAL_STORAGE_NAMESPACES.userJoinedChatRooms) ||
@@ -42,29 +41,30 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
     try {
       if (!user?._id) return;
 
-      await joinChatRoomsAPI({ roomId: roomId, userId: user._id });
-
-      setRooms((prevRooms) => {
-        if (!prevRooms) return prevRooms;
-        return prevRooms.filter((room) => room._id !== roomId);
+      const { currentRoomData } = await joinChatRoomsAPI({
+        roomId: roomId,
+        userId: user._id,
       });
 
-      setUserJoinedRooms((prevJoinedRooms) => {
-        const joinedRoom = rooms?.find((room) => room._id === roomId);
+      removeRoomFromAvailableList(currentRoomData);
 
-        if (!joinedRoom) return prevJoinedRooms;
-
-        if (!prevJoinedRooms) return [joinedRoom];
-
-        const roomExists = prevJoinedRooms.some((room) => room._id === roomId);
-
-        if (roomExists) return prevJoinedRooms;
-
-        return [...prevJoinedRooms, joinedRoom];
+      addParticipantToRoom(currentRoomData._id, {
+        _id: user._id,
+        nickname: user.nickname,
+        role: "user",
       });
+
+      addRoomIdToLocalUserData(roomId);
     } catch (error) {
       console.error(strings.errorJoiningRoom, error);
     }
+  };
+
+  const removeRoomFromAvailableList = (currentRoomData: IChatRoom) => {
+    setRooms((prevRooms) => {
+      if (!prevRooms) return prevRooms;
+      return prevRooms.filter((room) => room._id !== currentRoomData?._id);
+    });
   };
 
   const getActiveRoom = (roomId: string): IChatRoom | undefined => {

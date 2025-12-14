@@ -3,8 +3,8 @@ import type { IUserContext } from "./types";
 
 const defaultUserContext: IUserContext = {
   user: null,
-  setUser: () => {},
-  onLogoutUserData: () => {},
+  onSetUser: () => {},
+  addRoomIdToLocalUserData: () => {},
 };
 
 export const UserContext = createContext<IUserContext>(defaultUserContext);
