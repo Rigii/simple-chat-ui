@@ -2,8 +2,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { ChatList } from "../screens/chat-list/chat-list.screen";
 import { SCREEN_ROUTES } from "../constants-global/screen-routes";
 import { useUserContext } from "../context/user-context/use-user-context";
-import SignUp from "../screens/user-data/user-data";
-import { ChatRoom } from "../screens/chat-room/chat-room";
+import SignUp from "../screens/user-data/user-data.screen";
+import { ChatRoom } from "../screens/chat-room/chat-room.screen";
 import { AppNavbar } from "./navbar";
 import { ChatLayout } from "./layouts/chat-layout";
 
