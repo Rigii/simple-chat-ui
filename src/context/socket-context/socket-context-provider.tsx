@@ -58,26 +58,23 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
     };
   }, [user]);
 
-  const joinRoom = useCallback((roomId: string) => {
+  const joinRoom = (roomId: string) => {
     if (socketRef.current) {
       socketRef.current.emit(SOCKET_EVENTS.JOIN_CHAT, roomId);
       console.log(`${strings.joinedRoom} ${roomId}`);
     }
-  }, []);
+  };
 
-  const sendMessage = useCallback(
-    (roomId: string, message: string) => {
-      if (socketRef.current && isConnected) {
-        socketRef.current.emit(SOCKET_EVENTS.CHAT_ROOM_MESSAGE, {
-          chatRoomId: roomId,
-          participantId: user?._id,
-          nickname: user?.nickname,
-          message,
-        });
-      }
-    },
-    [isConnected, user]
-  );
+  const sendMessage = (roomId: string, message: string) => {
+    if (socketRef.current && isConnected) {
+      socketRef.current.emit(SOCKET_EVENTS.CHAT_ROOM_MESSAGE, {
+        chatRoomId: roomId,
+        participantId: user?._id,
+        nickname: user?.nickname,
+        message,
+      });
+    }
+  };
 
   const addSocketEventListener = useCallback(
     <T,>(event: string, handler: (data: T) => void) => {
@@ -93,13 +90,13 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
     [socketRef]
   );
 
-  const disconnect = useCallback(() => {
+  const disconnect = () => {
     if (socketRef.current) {
       socketRef.current.disconnect();
       socketRef.current = null;
       setIsConnected(false);
     }
-  }, []);
+  };
 
   const value = {
     isConnected,
