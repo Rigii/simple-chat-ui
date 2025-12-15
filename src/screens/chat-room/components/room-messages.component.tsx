@@ -31,7 +31,7 @@ export const RoomMessagesBlock: React.FC<{
   }
 
   return (
-    <Card className="flex-1 p-0 overflow-hidden">
+    <div className="flex-1">
       <div className="h-full overflow-y-auto p-4">
         <List className="border-0 space-y-3">
           {messages.map((msg) => {
@@ -102,10 +102,9 @@ export const RoomMessagesBlock: React.FC<{
               </ListItem>
             );
           })}
-
           <div ref={messagesEndRef} />
         </List>
       </div>
-    </Card>
+    </div>
   );
 };

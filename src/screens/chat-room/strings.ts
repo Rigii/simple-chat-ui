@@ -8,4 +8,5 @@ export const strings = {
   failToLoadRoomDetails: "Failed to load room details",
   startConversation: "Start a conversation!",
   participiants: "Participiants",
+  messages: "messages",
 };
