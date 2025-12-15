@@ -40,7 +40,7 @@ export const InputChatRoom: React.FC<{
   };
 
   return (
-    <div className="border-t border-gray-200  p-4">
+    <div className="border-t border-gray-200 p-4">
       <div className="flex gap-2">
         <TextInput
           value={inputValue}
