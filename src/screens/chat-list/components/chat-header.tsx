@@ -11,12 +11,13 @@ export const HeaderChatList = ({
   <div className="flex items-center justify-between mb-6">
     <h2 className="text-xl font-bold text-gray-900">{strings.rooms}</h2>
     <div className="flex flex-row gap-2">
-      <div className="bg-gray-500 p-3">
-        {rooms ? rooms.length : 0} {strings.availableRooms}
+      <div className="bg-gray-500 opacity-30 p-3">
+        {`${rooms ? rooms.length : 0} ${strings.availableRooms}`}
       </div>
-      <div className="bg-gray-500 p-3">
-        {userJoinedRooms ? userJoinedRooms.length : 0}
-        {strings.joinedRooms}
+      <div className="bg-gray-500 opacity-30 p-3">
+        {`${userJoinedRooms ? userJoinedRooms.length : 0} ${
+          strings.joinedRooms
+        }`}
       </div>
     </div>
   </div>

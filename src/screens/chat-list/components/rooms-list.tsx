@@ -13,7 +13,7 @@ export const RoomsList = ({
   onselect: (chat: IChatRoom) => void;
 }) => {
   return (
-    <div className="flex flex-col items-center justify-between mb-6">
+    <div className="flex flex-col items-center justify-between">
       {!rooms || rooms.length === 0 ? (
         <div className="text-center py-10">
           <p className="text-gray-500 mb-4">{strings.noRoomsYet}</p>
@@ -21,7 +21,7 @@ export const RoomsList = ({
       ) : (
         <>
           <h2 className="text-xl font-bold text-gray-900 mb-3">{title}</h2>
-          <List className="flex flex-col gap-y-2">
+          <List className="flex flex-col gap-y-2 w-full">
             {rooms.map((chat) => (
               <ChatItem key={chat._id} chat={chat} onClick={onselect} />
             ))}

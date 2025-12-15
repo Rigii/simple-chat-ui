@@ -31,7 +31,7 @@ export const ChatList: React.FC = () => {
   }, [user, navigate]);
 
   return (
-    <div className="max-w-md mx-auto p-4">
+    <div className="max-w-md mx-auto p-4 gap-y-3">
       <Card>
         <HeaderChatList rooms={rooms} userJoinedRooms={userJoinedRooms} />
         <RoomsList
