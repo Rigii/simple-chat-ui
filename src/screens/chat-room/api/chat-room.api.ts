@@ -41,7 +41,7 @@ export const getRoomDetails = async ({
   return response;
 };
 
-export const joinChatRoomsAPI = async ({
+export const joinChatRoomAPI = async ({
   roomId,
   userId,
 }: {

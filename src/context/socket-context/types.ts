@@ -1,6 +1,11 @@
+import type { IChatRoom } from "../chat-context/types";
+
 export interface ISocketContextType {
   isConnected: boolean;
-  joinRoom: (roomId: string) => void;
+  connectionSubscribe: (roomId: string) => Promise<{
+    success: boolean;
+    room?: IChatRoom | undefined;
+  }>;
   sendMessage: (
     roomId: string,
     message: string,

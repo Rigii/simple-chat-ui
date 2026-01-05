@@ -3,12 +3,17 @@ import { ChatContext } from "./chat-context";
 import type { IChatRoom, IChatUser } from "./types";
 import { getAllChats } from "../../screens/chat-list/chat-list.api";
 import { useUserContext } from "../user-context/use-user-context";
-import { joinChatRoomsAPI } from "../../screens/chat-room/api/chat-room.api";
+import { joinChatRoomAPI } from "../../screens/chat-room/api/chat-room.api";
 import { LOCAL_STORAGE_NAMESPACES } from "../../constants-global/storage-namespaces";
 import { strings } from "../../screens/chat-list/strings";
+import { useSocketContext } from "../socket-context/use-socket-context";
 
 export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
+  const [activeRoomCached, setActiveRoomCached] = useState<IChatRoom | null>(
+    null
+  );
   const { user, addRoomIdToLocalUserData } = useUserContext();
+  const { connectionSubscribe } = useSocketContext();
 
   const chatLocalStorageStore = (rooms: IChatRoom[] | null) => {
     localStorage.setItem(
@@ -29,13 +34,12 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
       [];
     return storedRooms;
   });
-  const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
 
   const joinRoom = async (roomId: string) => {
     try {
       if (!user?._id) return;
 
-      const { currentRoomData } = await joinChatRoomsAPI({
+      const { currentRoomData } = await joinChatRoomAPI({
         roomId: roomId,
         userId: user._id,
       });
@@ -50,15 +54,20 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const roomSubscribe = async (roomId: string) => {
+    try {
+      const connectionResponce = await connectionSubscribe(roomId);
+      setActiveRoomCached(connectionResponce.room || null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const removeRoomFromAvailableList = (currentRoomData: IChatRoom) => {
     setRooms((prevRooms) => {
       if (!prevRooms) return prevRooms;
       return prevRooms.filter((room) => room._id !== currentRoomData?._id);
     });
-  };
-
-  const getActiveRoom = (roomId: string): IChatRoom | undefined => {
-    return userJoinedRooms?.find((room) => room._id === roomId);
   };
 
   const addParticipantToRoom = (roomId: string, participant: IChatUser) => {
@@ -128,12 +137,11 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
     <ChatContext.Provider
       value={{
         rooms,
-        activeRoomId,
+        activeRoomCached,
         userJoinedRooms,
+        roomSubscribe,
         addParticipantToRoom,
         joinRoom,
-        setActiveRoomId,
-        getActiveRoom,
         clearAllRooms,
         getRoomById,
       }}

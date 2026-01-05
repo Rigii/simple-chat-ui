@@ -6,7 +6,7 @@ export const SOCKET_EVENTS = {
   CONNECT: "connect",
   CONNECT_ERROR: "connect_error",
   DISCONNECT: "disconnect",
-  JOIN_CHAT: "join_chat",
+  SUBSCRIBE_ROOM: "subscribe_room",
   LEAVE_CHAT: "leave_chat",
   CHAT_ROOM_MESSAGE: "chat_room_message",
   ACTIVE_ROOM_PARTICIPANTS: "active_room_participants",

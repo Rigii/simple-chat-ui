@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import { useUserContext } from "../../../context/user-context/use-user-context";
 import type { IParticipantJoinedLeftRoomEventData } from "../../../context/socket-context/types";
 
-/* Used in component, while implementing the current room state update */
 export const useChatRoomSocketListener = ({
   setMessages,
   setOnlineParticipants,
@@ -21,6 +20,8 @@ export const useChatRoomSocketListener = ({
 
   const { isConnected, addSocketEventListener, removeSocketEventListener } =
     useSocketContext();
+
+  const { connectionSubscribe } = useSocketContext();
 
   useEffect(() => {
     if (!isConnected || !chatId) {
@@ -57,6 +58,8 @@ export const useChatRoomSocketListener = ({
         return current.filter((id) => id !== data.userId);
       });
     };
+
+    connectionSubscribe(chatId);
 
     addSocketEventListener<IRoomMessage>(
       SOCKET_EVENTS.CHAT_ROOM_MESSAGE,
@@ -96,6 +99,7 @@ export const useChatRoomSocketListener = ({
     removeSocketEventListener,
     setMessages,
     setOnlineParticipants,
+    connectionSubscribe,
   ]);
 
   return;

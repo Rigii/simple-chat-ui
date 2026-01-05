@@ -9,6 +9,7 @@ import {
 import type { ISocketProviderProps } from "./types";
 import { SocketContext } from "./socket-context";
 import { strings } from "./strings";
+import type { IChatRoom } from "../chat-context/types";
 
 export const SocketProvider = ({ children }: ISocketProviderProps) => {
   const [isConnected, setIsConnected] = useState(false);
@@ -58,11 +59,29 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
     };
   }, [user]);
 
-  const joinRoom = (roomId: string) => {
-    if (socketRef.current) {
-      socketRef.current.emit(SOCKET_EVENTS.JOIN_CHAT, roomId);
-      console.log(`${strings.joinedRoom} ${roomId}`);
-    }
+  const connectionSubscribe = (
+    roomId: string
+  ): Promise<{ success: boolean; room?: IChatRoom }> => {
+    return new Promise((resolve, reject) => {
+      if (!socketRef.current) {
+        reject(new Error("Socket not connected"));
+        return;
+      }
+
+      socketRef.current.emit(
+        SOCKET_EVENTS.SUBSCRIBE_ROOM,
+        roomId,
+        (response: { success: boolean; room?: IChatRoom }) => {
+          if (response.success) {
+            console.log(`${strings.joinedRoom} ${roomId}`);
+            resolve(response);
+          } else {
+            console.error(`Failed to join room ${roomId}`);
+            reject(new Error(`Failed to join room ${roomId}`));
+          }
+        }
+      );
+    });
   };
 
   const sendMessage = (roomId: string, message: string) => {
@@ -100,7 +119,7 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
 
   const value = {
     isConnected,
-    joinRoom,
+    connectionSubscribe,
     sendMessage,
     addSocketEventListener,
     removeSocketEventListener,
