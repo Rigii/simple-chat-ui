@@ -61,13 +61,13 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
 
   const connectionSubscribe = (
     roomId: string
-  ): Promise<{ success: boolean; room?: IChatRoom }> => {
-    return new Promise((resolve, reject) => {
+  ): Promise<{ success: boolean; room?: IChatRoom }> =>
+    new Promise((resolve, reject) => {
       if (!socketRef.current) {
         reject(new Error("Socket not connected"));
         return;
       }
-
+      console.log(1111);
       socketRef.current.emit(
         SOCKET_EVENTS.SUBSCRIBE_ROOM,
         roomId,
@@ -82,7 +82,19 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
         }
       );
     });
-  };
+
+  const connectionUnsubscribe = (
+    roomId: string
+  ): Promise<{ success: boolean; room?: IChatRoom }> =>
+    new Promise((resolve, reject) => {
+      if (!socketRef.current) {
+        reject(new Error(strings.socketNotConnected));
+        return;
+      }
+      console.log(2222);
+
+      socketRef.current.emit(SOCKET_EVENTS.UNSUBSCRIBE_ROOM, roomId);
+    });
 
   const sendMessage = (roomId: string, message: string) => {
     if (socketRef.current && isConnected) {
@@ -120,6 +132,7 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
   const value = {
     isConnected,
     connectionSubscribe,
+    connectionUnsubscribe,
     sendMessage,
     addSocketEventListener,
     removeSocketEventListener,

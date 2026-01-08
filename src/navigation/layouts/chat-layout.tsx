@@ -6,13 +6,13 @@ import { SecurityRoute } from "../security-route";
 
 export const ChatLayout = () => {
   return (
-    <ChatStateProvider>
-      <SocketProvider>
+    <SocketProvider>
+      <ChatStateProvider>
         <SecurityRoute
           component={<Outlet />}
           redirectRoute={SCREEN_ROUTES.USER_AUTH}
         />
-      </SocketProvider>
-    </ChatStateProvider>
+      </ChatStateProvider>
+    </SocketProvider>
   );
 };

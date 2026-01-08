@@ -24,6 +24,13 @@ export const useChatRoomSocketListener = ({
   const { connectionSubscribe } = useSocketContext();
 
   useEffect(() => {
+    if (!chatId) {
+      return;
+    }
+    connectionSubscribe(chatId);
+  }, [chatId, connectionSubscribe]);
+
+  useEffect(() => {
     if (!isConnected || !chatId) {
       return;
     }
@@ -58,8 +65,6 @@ export const useChatRoomSocketListener = ({
         return current.filter((id) => id !== data.userId);
       });
     };
-
-    connectionSubscribe(chatId);
 
     addSocketEventListener<IRoomMessage>(
       SOCKET_EVENTS.CHAT_ROOM_MESSAGE,
@@ -99,7 +104,6 @@ export const useChatRoomSocketListener = ({
     removeSocketEventListener,
     setMessages,
     setOnlineParticipants,
-    connectionSubscribe,
   ]);
 
   return;

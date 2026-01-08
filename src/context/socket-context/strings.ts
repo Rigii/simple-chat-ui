@@ -4,4 +4,5 @@ export const strings = {
   socketConnectionError: "Socket connection error:",
   socketDisconnected: "Socket disconnected:",
   joinedRoom: "Joined room:",
+  socketNotConnected: "Socket not connected",
 };
