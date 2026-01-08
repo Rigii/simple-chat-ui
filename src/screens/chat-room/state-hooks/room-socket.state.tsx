@@ -21,13 +21,17 @@ export const useChatRoomSocketListener = ({
   const { isConnected, addSocketEventListener, removeSocketEventListener } =
     useSocketContext();
 
-  const { connectionSubscribe } = useSocketContext();
+  const { connectionSubscribe, connectionUnsubscribe } = useSocketContext();
 
   useEffect(() => {
     if (!chatId) {
       return;
     }
     connectionSubscribe(chatId);
+
+    return () => {
+      connectionUnsubscribe(chatId);
+    };
   }, [chatId, connectionSubscribe]);
 
   useEffect(() => {

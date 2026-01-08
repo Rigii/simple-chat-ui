@@ -3,6 +3,8 @@ import { ChatContext } from "./chat-context";
 
 export const useChatContext = () => {
   const context = useContext(ChatContext);
-
-  return context || {};
+  if (!context) {
+    throw new Error("useChatContext must be used within ChatProvider");
+  }
+  return context;
 };
