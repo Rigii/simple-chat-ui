@@ -45,11 +45,7 @@ export interface IChatRoom {
 export interface IChatContext {
   rooms: IChatRoom[] | [];
   userJoinedRooms: IChatRoom[] | [];
-  activeRoomCached: IChatRoom | null;
-  removeParticipantFromRoom?: (roomId: string, userId: string) => void;
   getRoomById: (roomId: string) => IChatRoom | undefined;
   clearAllRooms?: () => void;
   joinRoom: (roomId: string) => Promise<void>;
-  addParticipantToRoom: (roomId: string, participant: IChatUser) => void;
-  roomSubscribe: (roomId: string) => void;
 }

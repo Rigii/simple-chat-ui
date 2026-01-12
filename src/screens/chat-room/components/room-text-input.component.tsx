@@ -9,7 +9,7 @@ import { useUserContext } from "../../../context/user-context/use-user-context";
 import { useSocketContext } from "../../../context/socket-context/use-socket-context";
 
 export const InputChatRoom: React.FC<{
-  currentRoom?: IChatRoom;
+  currentRoom?: IChatRoom | null;
   setMessages: React.Dispatch<React.SetStateAction<IRoomMessage[]>>;
 }> = ({ currentRoom, setMessages }) => {
   const { user } = useUserContext();

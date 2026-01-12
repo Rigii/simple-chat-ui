@@ -9,7 +9,7 @@ import type {
 
 export const RoomMessagesBlock: React.FC<{
   messages: IRoomMessage[];
-  currentRoom: IChatRoom | undefined;
+  currentRoom: IChatRoom | null;
   onlineParticipants: string[] | undefined;
 }> = ({ messages, currentRoom, onlineParticipants }) => {
   const { user } = useUserContext();

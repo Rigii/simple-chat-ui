@@ -8,7 +8,7 @@ import { ChatRoomDetails } from "./components/room-details.component";
 export const ChatRoom: React.FC = () => {
   const {
     messages,
-    currentRoom,
+    activeRoomCached,
     onlineParticipants,
     setMessages,
     setOnlineParticipants,
@@ -24,10 +24,10 @@ export const ChatRoom: React.FC = () => {
 
       <RoomMessagesBlock
         messages={messages}
-        currentRoom={currentRoom}
+        currentRoom={activeRoomCached}
         onlineParticipants={onlineParticipants}
       />
-      <InputChatRoom currentRoom={currentRoom} setMessages={setMessages} />
+      <InputChatRoom currentRoom={activeRoomCached} setMessages={setMessages} />
     </div>
   );
 };

@@ -39,7 +39,6 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
     socketRef.current = socket;
 
     socket.on(SOCKET_EVENTS.CONNECT, () => {
-      console.log(strings.socketConnected, socket.id);
       setIsConnected(true);
     });
 
@@ -67,10 +66,9 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
         reject(new Error("Socket not connected"));
         return;
       }
-      console.log(1111);
       socketRef.current.emit(
         SOCKET_EVENTS.SUBSCRIBE_ROOM,
-        roomId,
+        { roomId },
         (response: { success: boolean; room?: IChatRoom }) => {
           if (response.success) {
             console.log(`${strings.joinedRoom} ${roomId}`);
@@ -91,8 +89,6 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
         reject(new Error(strings.socketNotConnected));
         return;
       }
-      console.log(2222);
-
       socketRef.current.emit(SOCKET_EVENTS.UNSUBSCRIBE_ROOM, roomId);
     });
 

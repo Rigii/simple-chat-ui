@@ -5,6 +5,7 @@ export interface ISocketContextType {
   connectionSubscribe: (roomId: string) => Promise<{
     success: boolean;
     room?: IChatRoom | undefined;
+    activeParticipants?: string[] | undefined;
   }>;
   connectionUnsubscribe: (roomId: string) => Promise<{
     success: boolean;
