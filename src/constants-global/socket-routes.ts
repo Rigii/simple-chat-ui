@@ -11,7 +11,7 @@ export const SOCKET_EVENTS = {
   LEAVE_CHAT: "leave_chat",
   CHAT_ROOM_MESSAGE: "chat_room_message",
   ACTIVE_ROOM_PARTICIPANTS: "active_room_participants",
-  PARTICIPANT_JOINED_ROOM: "user_joined_chat",
-  PARTICIPANT_LEFT_ROOM: "participant_disconnected",
+  PARTICIPANT_JOINED_CHAT_APP: "participant_joined_chat_app",
+  PARTICIPANT_LEFT_CHAT_APP: "participant_left_chat_app",
   CLIENT_READY: "client_ready",
 };

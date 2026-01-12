@@ -1,6 +1,6 @@
 import React from "react";
 import { InputChatRoom } from "./components/room-text-input.component";
-import { useChatRoomState } from "./state-hooks/chat-room.state";
+import { useChatRoomState } from "./state-hooks/room-data.state";
 import { RoomMessagesBlock } from "./components/room-messages.component";
 import { useChatRoomSocketListener } from "./state-hooks/room-socket.state";
 import { ChatRoomDetails } from "./components/room-details.component";

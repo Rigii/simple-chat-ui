@@ -36,6 +36,7 @@ export const useChatRoomSocketListener = ({
       eventData: IParticipantJoinedLeftRoomEventData
     ) => {
       const { data } = eventData;
+      console.log(1111, "JOINED", data.userId);
 
       setOnlineParticipants((current) => {
         if (!current) return;
@@ -52,7 +53,7 @@ export const useChatRoomSocketListener = ({
       const { data } = eventData;
       setOnlineParticipants((current) => {
         if (!current) return [];
-
+        console.log(22222, "LEFT", data.userId);
         return current.filter((id) => id !== data.userId);
       });
     };
@@ -63,12 +64,12 @@ export const useChatRoomSocketListener = ({
     );
 
     addSocketEventListener<IParticipantJoinedLeftRoomEventData>(
-      SOCKET_EVENTS.PARTICIPANT_JOINED_ROOM,
+      SOCKET_EVENTS.PARTICIPANT_JOINED_CHAT_APP,
       handleParticipantJoinedRoom
     );
 
     addSocketEventListener<IParticipantJoinedLeftRoomEventData>(
-      SOCKET_EVENTS.PARTICIPANT_LEFT_ROOM,
+      SOCKET_EVENTS.PARTICIPANT_LEFT_CHAT_APP,
       handleParticipantLeftRoom
     );
 
@@ -78,12 +79,12 @@ export const useChatRoomSocketListener = ({
         handleIncomingMessage
       );
       removeSocketEventListener<IParticipantJoinedLeftRoomEventData>(
-        SOCKET_EVENTS.PARTICIPANT_JOINED_ROOM,
+        SOCKET_EVENTS.PARTICIPANT_JOINED_CHAT_APP,
         handleParticipantJoinedRoom
       );
 
       removeSocketEventListener<IParticipantJoinedLeftRoomEventData>(
-        SOCKET_EVENTS.PARTICIPANT_LEFT_ROOM,
+        SOCKET_EVENTS.PARTICIPANT_LEFT_CHAT_APP,
         handleParticipantLeftRoom
       );
     };

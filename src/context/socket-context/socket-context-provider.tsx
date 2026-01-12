@@ -60,7 +60,11 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
 
   const connectionSubscribe = (
     roomId: string
-  ): Promise<{ success: boolean; room?: IChatRoom }> =>
+  ): Promise<{
+    success: boolean;
+    room: IChatRoom;
+    activeParticipants: string[];
+  }> =>
     new Promise((resolve, reject) => {
       if (!socketRef.current) {
         reject(new Error("Socket not connected"));
@@ -69,14 +73,23 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
       socketRef.current.emit(
         SOCKET_EVENTS.SUBSCRIBE_ROOM,
         { roomId },
-        (response: { success: boolean; room?: IChatRoom }) => {
-          if (response.success) {
-            console.log(`${strings.joinedRoom} ${roomId}`);
-            resolve(response);
-          } else {
-            console.error(`Failed to join room ${roomId}`);
+        (response: {
+          success: boolean;
+          room: IChatRoom;
+          activeParticipants: string[];
+        }) => {
+          if (
+            !response.success ||
+            !response.room ||
+            !response.activeParticipants
+          ) {
+            console.error(`${strings.failedToJoinRoom} ${roomId}`);
             reject(new Error(`Failed to join room ${roomId}`));
+            return;
           }
+
+          console.log(`${strings.joinedRoom} ${roomId}`);
+          resolve(response);
         }
       );
     });

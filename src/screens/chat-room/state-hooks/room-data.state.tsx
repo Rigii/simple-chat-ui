@@ -25,9 +25,12 @@ export const useChatRoomState = () => {
     const roomSocketSubscribe = async (roomId: string) => {
       try {
         if (!isConnected) return;
-        const connectionResponce = await connectionSubscribe(roomId);
-        setActiveRoom(connectionResponce.room || null);
-        setOnlineParticipants(connectionResponce.activeParticipants || []);
+        const { room, activeParticipants } = await connectionSubscribe(roomId);
+        setActiveRoom(room || null);
+        setOnlineParticipants([
+          ...activeParticipants,
+          ...(user?._id ? [user._id] : []),
+        ]);
       } catch (error) {
         console.error(error);
       }
