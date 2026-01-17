@@ -29,7 +29,7 @@ export const useChatRoomState = () => {
         setActiveRoom(room || null);
         setOnlineParticipants([
           ...activeParticipants,
-          ...(user?._id ? [user._id] : []),
+          ...(user?.public_id ? [user.public_id] : []),
         ]);
       } catch (error) {
         console.error(error);
@@ -42,8 +42,8 @@ export const useChatRoomState = () => {
         return;
       }
 
+      /* DTODO: Rename to getRoomMessages */
       const { messages } = await getRoomDetails({
-        // TODO: USE GET ROOM MESSAGES API
         chatRoomId: activeRoomCached._id,
         userId: user._id,
         chunkLimit: 200,
@@ -58,6 +58,7 @@ export const useChatRoomState = () => {
   }, [
     isConnected,
     user?._id,
+    user?.public_id,
     activeRoomCached?._id,
     chatId,
     connectionSubscribe,

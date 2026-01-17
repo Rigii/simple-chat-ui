@@ -15,10 +15,10 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
   const joinRoom = async (roomId: string) => {
     try {
       if (!user?._id) return;
-
       const { currentRoomData } = await joinChatRoomAPI({
         roomId: roomId,
         userId: user._id,
+        publicUserId: user.public_id,
       });
 
       removeRoomFromUnsubscribedList(currentRoomData);

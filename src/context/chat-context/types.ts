@@ -20,12 +20,15 @@ export interface IChatUser {
 export interface IRoomMessage {
   _id: string;
   chatRoomId: string;
-  participantId: string;
-
+  participantPublicId: string;
   nickname: string;
   message: string;
   created?: string;
   updated?: string;
+}
+
+export interface IRoomPostMessage extends IRoomMessage {
+  participantId: string;
 }
 
 export interface IRoomDetails {

@@ -34,7 +34,7 @@ export interface ISocketProviderProps {
 export interface IParticipantJoinedLeftRoomEvent {
   roomId: string;
   roomName: string;
-  userId: string;
+  userPublicId: string;
   nickname: string;
 }
 

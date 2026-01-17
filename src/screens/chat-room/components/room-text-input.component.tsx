@@ -4,6 +4,7 @@ import { HiPaperAirplane } from "react-icons/hi";
 import type {
   IChatRoom,
   IRoomMessage,
+  IRoomPostMessage,
 } from "../../../context/chat-context/types";
 import { useUserContext } from "../../../context/user-context/use-user-context";
 import { useSocketContext } from "../../../context/socket-context/use-socket-context";
@@ -18,13 +19,13 @@ export const InputChatRoom: React.FC<{
 
   const handleSendMessage = () => {
     if (!inputValue.trim() || !user || !currentRoom) return;
-
-    const newMessage: IRoomMessage = {
+    const newMessage: IRoomPostMessage = {
       _id: Date.now().toString(),
       message: inputValue,
       nickname: user.nickname,
       chatRoomId: currentRoom._id,
       participantId: user._id,
+      participantPublicId: user.public_id,
     };
 
     sendMessage(currentRoom._id, inputValue, newMessage);

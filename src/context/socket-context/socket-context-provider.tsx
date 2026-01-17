@@ -110,6 +110,7 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
       socketRef.current.emit(SOCKET_EVENTS.CHAT_ROOM_MESSAGE, {
         chatRoomId: roomId,
         participantId: user?._id,
+        participantPublicId: user?.public_id,
         nickname: user?.nickname,
         message,
       });

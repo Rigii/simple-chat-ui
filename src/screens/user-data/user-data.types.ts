@@ -3,6 +3,7 @@ export interface IUserDataValues {
   nickname: string;
   rooms: string[];
   role: string;
+  public_id: string;
   _id: string;
 }
 

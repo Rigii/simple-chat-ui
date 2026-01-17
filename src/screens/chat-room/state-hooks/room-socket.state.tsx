@@ -26,7 +26,10 @@ export const useChatRoomSocketListener = ({
       return;
     }
     const handleIncomingMessage = (data: IRoomMessage) => {
-      if (data.chatRoomId !== chatId || data.participantId === user?._id) {
+      if (
+        data.chatRoomId !== chatId ||
+        data.participantPublicId === user?.public_id
+      ) {
         return;
       }
       setMessages((prev) => [...prev, data]);
@@ -36,12 +39,11 @@ export const useChatRoomSocketListener = ({
       eventData: IParticipantJoinedLeftRoomEventData
     ) => {
       const { data } = eventData;
-      console.log(1111, "JOINED", data.userId);
 
       setOnlineParticipants((current) => {
         if (!current) return;
-        if (!current?.includes(data?.userId)) {
-          return [...current, data?.userId];
+        if (!current?.includes(data?.userPublicId)) {
+          return [...current, data?.userPublicId];
         }
         return current;
       });
@@ -53,8 +55,7 @@ export const useChatRoomSocketListener = ({
       const { data } = eventData;
       setOnlineParticipants((current) => {
         if (!current) return [];
-        console.log(22222, "LEFT", data.userId);
-        return current.filter((id) => id !== data.userId);
+        return current.filter((id) => id !== data.userPublicId);
       });
     };
 

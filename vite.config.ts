@@ -5,5 +5,9 @@ import flowbiteReact from "flowbite-react/plugin/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    port: 5186,
+    strictPort: true,
+  },
   plugins: [react(), tailwindcss(), flowbiteReact()],
 });
