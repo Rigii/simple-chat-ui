@@ -24,13 +24,13 @@ export const useChatRoomState = () => {
   useEffect(() => {
     const roomSocketSubscribe = async (roomId: string) => {
       try {
-        if (!isConnected) return;
         const { room, activeParticipants } = await connectionSubscribe(roomId);
+        if (!user || !isConnected) return;
+
         setActiveRoom(room || null);
-        setOnlineParticipants([
-          ...activeParticipants,
-          ...(user?.public_id ? [user.public_id] : []),
-        ]);
+
+        const usersSet = new Set([...activeParticipants, user.public_id]);
+        setOnlineParticipants(Array.from(usersSet));
       } catch (error) {
         console.error(error);
       }
