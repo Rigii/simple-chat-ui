@@ -20,12 +20,15 @@ export interface IChatUser {
 export interface IRoomMessage {
   _id: string;
   chatRoomId: string;
-  participantId: string;
-
+  participantPublicId: string;
   nickname: string;
   message: string;
   created?: string;
   updated?: string;
+}
+
+export interface IRoomPostMessage extends IRoomMessage {
+  participantId: string;
 }
 
 export interface IRoomDetails {
@@ -45,12 +48,7 @@ export interface IChatRoom {
 export interface IChatContext {
   rooms: IChatRoom[] | [];
   userJoinedRooms: IChatRoom[] | [];
-  activeRoomId?: string | null;
-  setActiveRoomId: React.Dispatch<React.SetStateAction<string | null>>;
-  getActiveRoom: (roomId: string) => IChatRoom | undefined;
-  removeParticipantFromRoom?: (roomId: string, userId: string) => void;
   getRoomById: (roomId: string) => IChatRoom | undefined;
   clearAllRooms?: () => void;
   joinRoom: (roomId: string) => Promise<void>;
-  addParticipantToRoom: (roomId: string, participant: IChatUser) => void;
 }

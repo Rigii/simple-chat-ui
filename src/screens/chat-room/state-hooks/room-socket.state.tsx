@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import { useUserContext } from "../../../context/user-context/use-user-context";
 import type { IParticipantJoinedLeftRoomEventData } from "../../../context/socket-context/types";
 
-/* Used in component, while implementing the current room state update */
 export const useChatRoomSocketListener = ({
   setMessages,
   setOnlineParticipants,
@@ -27,7 +26,10 @@ export const useChatRoomSocketListener = ({
       return;
     }
     const handleIncomingMessage = (data: IRoomMessage) => {
-      if (data.chatRoomId !== chatId || data.participantId === user?._id) {
+      if (
+        data.chatRoomId !== chatId ||
+        data.participantPublicId === user?.public_id
+      ) {
         return;
       }
       setMessages((prev) => [...prev, data]);
@@ -40,8 +42,8 @@ export const useChatRoomSocketListener = ({
 
       setOnlineParticipants((current) => {
         if (!current) return;
-        if (!current?.includes(data?.userId)) {
-          return [...current, data?.userId];
+        if (!current?.includes(data?.userPublicId)) {
+          return [...current, data?.userPublicId];
         }
         return current;
       });
@@ -53,8 +55,7 @@ export const useChatRoomSocketListener = ({
       const { data } = eventData;
       setOnlineParticipants((current) => {
         if (!current) return [];
-
-        return current.filter((id) => id !== data.userId);
+        return current.filter((id) => id !== data.userPublicId);
       });
     };
 
@@ -64,12 +65,12 @@ export const useChatRoomSocketListener = ({
     );
 
     addSocketEventListener<IParticipantJoinedLeftRoomEventData>(
-      SOCKET_EVENTS.PARTICIPANT_JOINED_ROOM,
+      SOCKET_EVENTS.PARTICIPANT_JOINED_CHAT_APP,
       handleParticipantJoinedRoom
     );
 
     addSocketEventListener<IParticipantJoinedLeftRoomEventData>(
-      SOCKET_EVENTS.PARTICIPANT_LEFT_ROOM,
+      SOCKET_EVENTS.PARTICIPANT_LEFT_CHAT_APP,
       handleParticipantLeftRoom
     );
 
@@ -79,12 +80,12 @@ export const useChatRoomSocketListener = ({
         handleIncomingMessage
       );
       removeSocketEventListener<IParticipantJoinedLeftRoomEventData>(
-        SOCKET_EVENTS.PARTICIPANT_JOINED_ROOM,
+        SOCKET_EVENTS.PARTICIPANT_JOINED_CHAT_APP,
         handleParticipantJoinedRoom
       );
 
       removeSocketEventListener<IParticipantJoinedLeftRoomEventData>(
-        SOCKET_EVENTS.PARTICIPANT_LEFT_ROOM,
+        SOCKET_EVENTS.PARTICIPANT_LEFT_CHAT_APP,
         handleParticipantLeftRoom
       );
     };

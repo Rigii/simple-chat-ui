@@ -9,6 +9,7 @@ import {
 import type { ISocketProviderProps } from "./types";
 import { SocketContext } from "./socket-context";
 import { strings } from "./strings";
+import type { IChatRoom } from "../chat-context/types";
 
 export const SocketProvider = ({ children }: ISocketProviderProps) => {
   const [isConnected, setIsConnected] = useState(false);
@@ -38,7 +39,6 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
     socketRef.current = socket;
 
     socket.on(SOCKET_EVENTS.CONNECT, () => {
-      console.log(strings.socketConnected, socket.id);
       setIsConnected(true);
     });
 
@@ -58,18 +58,59 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
     };
   }, [user]);
 
-  const joinRoom = (roomId: string) => {
-    if (socketRef.current) {
-      socketRef.current.emit(SOCKET_EVENTS.JOIN_CHAT, roomId);
-      console.log(`${strings.joinedRoom} ${roomId}`);
-    }
-  };
+  const connectionSubscribe = (
+    roomId: string
+  ): Promise<{
+    success: boolean;
+    room: IChatRoom;
+    activeParticipants: string[];
+  }> =>
+    new Promise((resolve, reject) => {
+      if (!socketRef.current) {
+        reject(new Error("Socket not connected"));
+        return;
+      }
+      socketRef.current.emit(
+        SOCKET_EVENTS.SUBSCRIBE_ROOM,
+        { roomId },
+        (response: {
+          success: boolean;
+          room: IChatRoom;
+          activeParticipants: string[];
+        }) => {
+          if (
+            !response.success ||
+            !response.room ||
+            !response.activeParticipants
+          ) {
+            console.error(`${strings.failedToJoinRoom} ${roomId}`);
+            reject(new Error(`Failed to join room ${roomId}`));
+            return;
+          }
+
+          console.log(`${strings.joinedRoom} ${roomId}`);
+          resolve(response);
+        }
+      );
+    });
+
+  const connectionUnsubscribe = (
+    roomId: string
+  ): Promise<{ success: boolean; room?: IChatRoom }> =>
+    new Promise((resolve, reject) => {
+      if (!socketRef.current) {
+        reject(new Error(strings.socketNotConnected));
+        return;
+      }
+      socketRef.current.emit(SOCKET_EVENTS.UNSUBSCRIBE_ROOM, roomId);
+    });
 
   const sendMessage = (roomId: string, message: string) => {
     if (socketRef.current && isConnected) {
       socketRef.current.emit(SOCKET_EVENTS.CHAT_ROOM_MESSAGE, {
         chatRoomId: roomId,
         participantId: user?._id,
+        participantPublicId: user?.public_id,
         nickname: user?.nickname,
         message,
       });
@@ -100,7 +141,8 @@ export const SocketProvider = ({ children }: ISocketProviderProps) => {
 
   const value = {
     isConnected,
-    joinRoom,
+    connectionSubscribe,
+    connectionUnsubscribe,
     sendMessage,
     addSocketEventListener,
     removeSocketEventListener,

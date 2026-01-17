@@ -41,16 +41,18 @@ export const getRoomDetails = async ({
   return response;
 };
 
-export const joinChatRoomsAPI = async ({
+export const joinChatRoomAPI = async ({
   roomId,
   userId,
+  publicUserId,
 }: {
   roomId: string;
   userId: string;
+  publicUserId: string;
 }): Promise<{ currentRoomData: IChatRoom; currentUserData: IChatUser }> => {
   const response = await postData({
     requestUrl: API_ROUTES.JOIN_CHAT_ROOMS,
-    params: { userId, roomId },
+    params: { userId, roomId, publicUserId },
   });
 
   return response;

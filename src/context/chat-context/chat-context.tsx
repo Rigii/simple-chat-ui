@@ -1,17 +1,4 @@
 import { createContext } from "react";
 import type { IChatContext } from "./types";
 
-const defaultChatContext: IChatContext = {
-  rooms: [],
-  activeRoomId: null,
-  userJoinedRooms: [],
-  setActiveRoomId: () => {},
-  removeParticipantFromRoom: () => {},
-  getRoomById: () => undefined,
-  clearAllRooms: () => {},
-  getActiveRoom: () => undefined,
-  joinRoom: async () => {},
-  addParticipantToRoom: () => {},
-};
-
-export const ChatContext = createContext<IChatContext>(defaultChatContext);
+export const ChatContext = createContext<IChatContext | undefined>(undefined);

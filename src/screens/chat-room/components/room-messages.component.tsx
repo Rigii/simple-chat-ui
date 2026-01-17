@@ -9,7 +9,7 @@ import type {
 
 export const RoomMessagesBlock: React.FC<{
   messages: IRoomMessage[];
-  currentRoom: IChatRoom | undefined;
+  currentRoom: IChatRoom | null;
   onlineParticipants: string[] | undefined;
 }> = ({ messages, currentRoom, onlineParticipants }) => {
   const { user } = useUserContext();
@@ -37,7 +37,7 @@ export const RoomMessagesBlock: React.FC<{
           {messages.map((msg) => {
             const isOwnMessage = msg.nickname === user.nickname;
 
-            const marker = onlineParticipants?.includes(msg.participantId)
+            const marker = onlineParticipants?.includes(msg.participantPublicId)
               ? "marker:text-green-500"
               : "marker:text-gray-500";
 

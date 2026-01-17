@@ -1,46 +1,27 @@
 import { useState, useEffect, type ReactNode } from "react";
 import { ChatContext } from "./chat-context";
-import type { IChatRoom, IChatUser } from "./types";
+import type { IChatRoom } from "./types";
 import { getAllChats } from "../../screens/chat-list/chat-list.api";
 import { useUserContext } from "../user-context/use-user-context";
-import { joinChatRoomsAPI } from "../../screens/chat-room/api/chat-room.api";
-import { LOCAL_STORAGE_NAMESPACES } from "../../constants-global/storage-namespaces";
+import { joinChatRoomAPI } from "../../screens/chat-room/api/chat-room.api";
 import { strings } from "../../screens/chat-list/strings";
 
 export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
   const { user, addRoomIdToLocalUserData } = useUserContext();
 
-  const chatLocalStorageStore = (rooms: IChatRoom[] | null) => {
-    localStorage.setItem(
-      LOCAL_STORAGE_NAMESPACES.userJoinedChatRooms,
-      JSON.stringify(rooms)
-    );
-  };
-
-  const roomsLocalStorageRetrieve = (name: string): IChatRoom[] | null => {
-    const stored = localStorage.getItem(name);
-    return stored ? JSON.parse(stored) : null;
-  };
-
   const [rooms, setRooms] = useState<IChatRoom[]>([]);
-  const [userJoinedRooms, setUserJoinedRooms] = useState<IChatRoom[]>(() => {
-    const storedRooms =
-      roomsLocalStorageRetrieve(LOCAL_STORAGE_NAMESPACES.userJoinedChatRooms) ||
-      [];
-    return storedRooms;
-  });
-  const [activeRoomId, setActiveRoomId] = useState<string | null>(null);
+  const [userJoinedRooms, setUserJoinedRooms] = useState<IChatRoom[]>([]);
 
   const joinRoom = async (roomId: string) => {
     try {
       if (!user?._id) return;
-
-      const { currentRoomData } = await joinChatRoomsAPI({
+      const { currentRoomData } = await joinChatRoomAPI({
         roomId: roomId,
         userId: user._id,
+        publicUserId: user.public_id,
       });
 
-      removeRoomFromAvailableList(currentRoomData);
+      removeRoomFromUnsubscribedList(currentRoomData);
 
       setUserJoinedRooms((joinedRooms) => [...joinedRooms, currentRoomData]);
 
@@ -50,54 +31,20 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const removeRoomFromAvailableList = (currentRoomData: IChatRoom) => {
+  const removeRoomFromUnsubscribedList = (currentRoomData: IChatRoom) => {
     setRooms((prevRooms) => {
       if (!prevRooms) return prevRooms;
       return prevRooms.filter((room) => room._id !== currentRoomData?._id);
     });
   };
 
-  const getActiveRoom = (roomId: string): IChatRoom | undefined => {
-    return userJoinedRooms?.find((room) => room._id === roomId);
-  };
-
-  const addParticipantToRoom = (roomId: string, participant: IChatUser) => {
-    setUserJoinedRooms((prevRooms) => {
-      if (!prevRooms) return [];
-
-      return prevRooms.map((room) => {
-        if (room._id === roomId) {
-          const participantExists = room.participants.some(
-            (p) => p._id === participant._id
-          );
-
-          if (!participantExists) {
-            return {
-              ...room,
-              participants: [...room.participants, participant],
-              updated: new Date(),
-            };
-          }
-        }
-        return room;
-      });
-    });
-  };
-
   const clearAllRooms = () => {
     setUserJoinedRooms([]);
-    localStorage.removeItem(LOCAL_STORAGE_NAMESPACES.userJoinedChatRooms);
   };
 
   const getRoomById = (roomId: string): IChatRoom | undefined => {
     return userJoinedRooms?.find((room) => room._id === roomId);
   };
-
-  useEffect(() => {
-    if (userJoinedRooms !== null) {
-      chatLocalStorageStore(userJoinedRooms);
-    }
-  }, [userJoinedRooms]);
 
   useEffect(() => {
     if (!user?._id) return;
@@ -128,12 +75,8 @@ export const ChatStateProvider = ({ children }: { children: ReactNode }) => {
     <ChatContext.Provider
       value={{
         rooms,
-        activeRoomId,
         userJoinedRooms,
-        addParticipantToRoom,
         joinRoom,
-        setActiveRoomId,
-        getActiveRoom,
         clearAllRooms,
         getRoomById,
       }}

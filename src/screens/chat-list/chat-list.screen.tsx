@@ -11,12 +11,10 @@ import { RoomsList } from "./components/rooms-list";
 
 export const ChatList: React.FC = () => {
   const { user } = useUserContext();
-  const { rooms, userJoinedRooms, setActiveRoomId, joinRoom } =
-    useChatContext();
+  const { rooms, userJoinedRooms, joinRoom } = useChatContext();
   const navigate = useNavigate();
 
   const onItemClick = (chat: IChatRoom) => {
-    setActiveRoomId(chat._id);
     navigate(`${SCREEN_ROUTES.CHAT_LIST}/${chat._id}`);
   };
 
